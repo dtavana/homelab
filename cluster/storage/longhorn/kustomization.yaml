@@ -9,4 +9,4 @@ resources:
 configMapGenerator:
   - name: longhorn-values
     files:
-      - values.yaml
+      - values.yaml=values.yaml
