@@ -1,0 +1,27 @@
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Alert
+metadata:
+  name: discord-alert
+  namespace: flux-system
+spec:
+  providerRef:
+    name: discord-provider
+  eventSeverity: info
+  eventSources:
+    - kind: Kustomization
+      name: "*"
+      namespace: "*"
+
+    - kind: HelmRelease
+      name: "*"
+      namespace: "*"
+
+    - kind: GitRepository
+      name: "flux-system"
+      namespace: flux-system
+
+    - kind: HelmRepository
+      name: "*"
+      namespace: flux-system
+
+  summary: "FluxCD Alert: {{ .InvolvedObject.Kind }} {{ .InvolvedObject.Namespace }}/{{ .InvolvedObject.Name }} {{ .Severity }} event at {{ .Timestamp }}"
