@@ -12,10 +12,6 @@ spec:
     name: flux-system
   dependsOn:
     - name: infra
-  decryption:
-    provider: sops
-    secretRef:
-      name: sops-pgp
   healthChecks:
     - apiVersion: notification.toolkit.fluxcd.io/v1beta3
       kind: Provider
