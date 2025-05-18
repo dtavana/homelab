@@ -16,8 +16,8 @@ spec:
       namespace: "*"
     - kind: GitRepository
       name: "flux-system"
-      namespace: flux-system
+      namespace: "flux-system"
     - kind: HelmRepository
       name: "*"
-      namespace: flux-system
+      namespace: "flux-system"
   summary: "FluxCD Alert: {{ .InvolvedObject.Kind }} {{ .InvolvedObject.Namespace }}/{{ .InvolvedObject.Name }} {{ .Severity }} event at {{ .Timestamp }}"
