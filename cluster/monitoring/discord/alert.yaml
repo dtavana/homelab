@@ -20,6 +20,3 @@ spec:
     - kind: HelmRepository
       name: "*"
       namespace: "flux-system"
-  eventMetadata:
-    summary: |
-      FluxCD Alert: {{ .InvolvedObject.Kind }} {{ .InvolvedObject.Namespace }}/{{ .InvolvedObject.Name }} {{ .Severity }} event at {{ .Timestamp }}
