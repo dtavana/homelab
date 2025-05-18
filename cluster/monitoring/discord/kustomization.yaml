@@ -5,3 +5,4 @@ namespace: flux-system
 resources:
   - provider.yaml
   - alert.yaml
+  - url-secret.sops.yaml
