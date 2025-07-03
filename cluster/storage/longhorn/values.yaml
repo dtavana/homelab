@@ -3,8 +3,6 @@ defaultSettings:
 ingress:
   enabled: true
   ingressClassName: "traefik"
-  hosts:
-    - host: "longhorn.cube.local"
-      paths:
-        - path: /
-          pathType: Prefix
+  host: "longhorn.cube.local"
+  path: /
+  pathType: Prefix
