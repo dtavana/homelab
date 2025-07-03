@@ -1,0 +1,26 @@
+image:
+  tag: "2025.7.1"
+
+persistence:
+  enabled: true
+  existingClaim: ""
+  storageClass: "longhorn"
+  accessMode: ReadWriteOnce
+  size: "10Gi"
+
+timezone: "America/New_York"
+
+ingress:
+  enabled: true
+  ingressClassName: "traefik"
+  hosts:
+    - host: "hass.cube.local"
+      paths:
+        - path: /
+          pathType: Prefix
+
+http:
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - "10.42.0.0/16"
+    - "10.43.0.0/16"
