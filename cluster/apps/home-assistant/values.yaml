@@ -1,6 +1,3 @@
-image:
-  tag: "2025.7.1"
-
 persistence:
   enabled: true
   existingClaim: ""
@@ -19,8 +16,9 @@ ingress:
         - path: /
           pathType: Prefix
 
-http:
-  use_x_forwarded_for: true
+configuration:
+  enabled: true
+  forceInit: false
   trusted_proxies:
     - "10.42.0.0/16"
     - "10.43.0.0/16"
