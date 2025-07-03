@@ -1,0 +1,16 @@
+persistence:
+  enabled: true
+  storageClass: "longhorn"
+  size: "2Gi"
+
+service:
+  type: ClusterIP
+
+ingress:
+  enabled: true
+  ingressClassName: "traefik"
+  hosts:
+    - host: "portainer.cube.local"
+      paths:
+        - path: /
+          pathType: Prefix

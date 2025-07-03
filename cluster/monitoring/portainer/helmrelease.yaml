@@ -1,0 +1,25 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: portainer
+  namespace: portainer-system
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: portainer
+      version: "1.0.40"
+      sourceRef:
+        kind: HelmRepository
+        name: portainer-repo
+        namespace: flux-system
+  targetNamespace: portainer-system
+  valuesFrom:
+    - kind: ConfigMap
+      name: portainer-values
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
