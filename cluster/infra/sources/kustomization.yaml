@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   # APPS
   - home-assistant-helmrepo.yaml
+  - pihole-helmrepo.yaml
   # STORAGE
   - longhorn-helmrepo.yaml
   # MONITORING
