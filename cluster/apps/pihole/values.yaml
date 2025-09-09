@@ -1,0 +1,15 @@
+
+persistentVolumeClaim:
+  enabled: true
+  size: 2Gi
+  storageClassName: longhorn
+
+serviceWeb:
+  type: LoadBalancer
+
+serviceDns:
+  type: LoadBalancer
+
+admin:
+  enabled: true
+  existingSecret: "pihole-admin-password"
