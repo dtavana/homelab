@@ -9,7 +9,3 @@ serviceWeb:
 
 serviceDns:
   type: LoadBalancer
-
-admin:
-  enabled: true
-  existingSecret: "pihole-admin-password"

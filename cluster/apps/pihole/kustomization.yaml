@@ -5,7 +5,6 @@ namespace: pihole-system
 resources:
   - namespace.yaml
   - helmrelease.yaml
-  - secret.sops.yaml
 
 configMapGenerator:
   - name: pihole-values
