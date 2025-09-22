@@ -5,8 +5,6 @@ persistence:
   accessMode: ReadWriteOnce
   size: "10Gi"
 
-timezone: "America/New_York"
-
 ingress:
   enabled: true
   ingressClassName: "traefik"
@@ -22,3 +20,30 @@ configuration:
   trusted_proxies:
     - "10.42.0.0/16"
     - "10.43.0.0/16"
+
+env:
+  - name: TZ
+    value: "America/New_York"
+
+initContainers:
+  - name: install-hacs
+    image: alpine:latest
+    command: ["/bin/sh", "-c"]
+    args:
+      - |
+        set -e
+        HACS_DIR="/config/custom_components/hacs"
+        if [ -d "$HACS_DIR" ]; then
+          echo "HACS is already installed, skipping."
+        else
+          echo "Installing HACS..."
+          apk add --no-cache wget unzip
+          mkdir -p $(dirname "$HACS_DIR")
+          wget -O /tmp/hacs.zip https://github.com/hacs/integration/releases/latest/download/hacs.zip
+          unzip /tmp/hacs.zip -d "$HACS_DIR"
+          rm /tmp/hacs.zip
+          echo "HACS installation complete."
+        fi
+    volumeMounts:
+      - name: home-assistant
+        mountPath: /config
