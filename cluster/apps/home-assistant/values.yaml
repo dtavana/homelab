@@ -45,5 +45,5 @@ initContainers:
           echo "HACS installation complete."
         fi
     volumeMounts:
-      - name: home-assistant
+      - name: hass-system-home-assistant
         mountPath: /config
