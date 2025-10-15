@@ -1,0 +1,31 @@
+---
+k3s_version: v1.30.2+k3s2
+ansible_user: k3s
+systemd_dir: /etc/systemd/system
+system_timezone: "America/New_York"
+
+flannel_iface: eth1
+
+apiserver_endpoint: 192.168.0.20
+
+k3s_node_ip: "{{ ansible_facts[(flannel_iface)]['ipv4']['address'] }}"
+k3s_master_taint: "{{ true if groups['node'] | default([]) | length >= 1 else false }}"
+extra_args: >-
+  {{ '--flannel-iface=' + flannel_iface }}
+  --node-ip={{ k3s_node_ip }}
+extra_server_args: >-
+  {{ extra_args }}
+  {{ '--node-taint node-role.kubernetes.io/master=true:NoSchedule' if k3s_master_taint else '' }}
+  --tls-san {{ apiserver_endpoint }}
+  --disable servicelb
+  --disable traefik
+extra_agent_args: >-
+  {{ extra_args }}
+kube_vip_arp: true
+kube_vip_tag_version: v0.8.2
+metal_lb_type: native
+metal_lb_mode: layer2
+metal_lb_speaker_tag_version: v0.14.8
+metal_lb_controller_tag_version: v0.14.8
+
+metal_lb_ip_range: 192.168.0.30-192.168.0.59
