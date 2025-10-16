@@ -1,0 +1,61 @@
+---
+- name: 01 - Configure Base OS for Kubernetes Nodes
+  hosts: k3s_cluster
+  gather_facts: true
+
+  tasks:
+    - name: Set hostname from inventory
+      ansible.builtin.hostname:
+        name: "{{ inventory_hostname }}"
+
+    - name: Configure network interfaces using Netplan template
+      ansible.builtin.template:
+        src: ../templates/netplan.yml.j2
+        dest: /etc/netplan/01-netcfg.yaml
+        owner: root
+        group: root
+        mode: "0644"
+      notify: Apply Netplan Configuration
+
+    - name: Ensure required packages are installed
+      ansible.builtin.apt:
+        name:
+          - avahi-daemon
+          - git
+          - curl
+          - nano
+          - open-iscsi
+        state: present
+        update_cache: yes
+
+    - name: Ensure UFW firewall is disabled for cluster communication
+      ansible.builtin.ufw:
+        state: disabled
+
+    - name: Ensure k3s user exists and is in the sudo group
+      ansible.builtin.user:
+        name: k3s
+        state: present
+        shell: /bin/bash
+        groups: sudo
+        append: yes
+
+    - name: Add authorized SSH keys for the k3s user
+      ansible.posix.authorized_key:
+        user: k3s
+        state: present
+        key: "{{ item }}"
+      loop:
+        - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIhdUysL+DrOec70uk/tbIOV4p1PJEJpAtYOqxVEASXd datav@dtavana-pc"
+        - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCzKwNVOQioVQL0Cm299jUSB5qgxrs5aulXosFJLTKc+ZZz7p702NeMlkkDiElIUg/9Zgj870eBifEl6mQoYLsuINyRdWvvfQeMjEROvR0f+QKDn11uvvQQQEoU7CaoZihg3OX6PKYTFwtBkGfS6rX5RtaeBp3NfrJBm1a7A38wkzw0w/dmazY/lGrhdy/4pCDaP/I0PLP5f3GKjoVB4gVrHNl1vSp+xX2LPsCbmq+R11X7i+z+z6WnH7Qi+d8YsxC+kS58umTRAkTi7zgNTidaZc7DYtvPfaup6KR6W8zEpc8idBk+mD9cAfHW/bJAMdCq4ApT5gHy5xGAb8WZ/csJooiT69jxyPfUiH0thA+WHRCwhJ6M06RzdTlEgMRy72Zj4SLPeEf8S21Zo3Q9xCR4/Hy9/KKLZrAooz31W/FYnzgmq8yO240A3YV3bfPqMcwsmDSj8Ikxbi4QzXxRvG8menjXScFmmAgn8N4wa96m1BX9BR1EozU5BTD61TBYhXc= dtavana@Mac"
+
+    - name: Allow k3s user to run sudo without a password
+      ansible.builtin.copy:
+        dest: /etc/sudoers.d/90-k3s-user
+        content: "k3s ALL=(ALL) NOPASSWD:ALL"
+        mode: "0440"
+        validate: "visudo -cf %s"
+
+  handlers:
+    - name: Apply Netplan Configuration
+      ansible.builtin.command: netplan apply

@@ -1,0 +1,12 @@
+network:
+  version: 2
+  ethernets:
+    # Main network interface (public), uses DHCP.
+    enp1s0:
+      dhcp4: true
+
+    # Private network interface (inter-cluster), uses a static IP.
+    enp3s0:
+      dhcp4: no
+      addresses:
+        - {{ private_ip }}/24
