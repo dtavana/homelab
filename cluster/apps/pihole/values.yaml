@@ -10,7 +10,7 @@ serviceDns:
   type: LoadBalancer
 
 podDnsConfig:
-  enabled: false
+  enabled: false
 
 capabilities:
   add:
