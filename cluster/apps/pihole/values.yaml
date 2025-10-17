@@ -9,10 +9,9 @@ serviceWeb:
 serviceDns:
   type: LoadBalancer
 
+podDnsConfig:
+  enabled: false
+
 capabilities:
   add:
     - NET_ADMIN
-
-dnsmasq:
-  customDnsEntries:
-    - address: "/cube.local/192.168.0.243"
