@@ -2,7 +2,7 @@ defaultSettings:
   defaultDataPath: "/var/lib/longhorn/"
 ingress:
   enabled: true
-  ingressClassName: "traefik"
+  ingressClassName: "nginx"
   host: "longhorn.cube.local"
   path: /
   pathType: Prefix

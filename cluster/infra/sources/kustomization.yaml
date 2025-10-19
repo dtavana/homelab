@@ -8,3 +8,5 @@ resources:
   - longhorn-helmrepo.yaml
   # MONITORING
   - portainer-helmrepo.yaml
+  # NETWORKING
+  - nginx-helmrepo.yaml

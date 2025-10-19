@@ -12,6 +12,7 @@ spec:
     name: flux-system
   dependsOn:
     - name: infra
+    - name: networking
   healthChecks:
     - apiVersion: notification.toolkit.fluxcd.io/v1beta3
       kind: Provider
