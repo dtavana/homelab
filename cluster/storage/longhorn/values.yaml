@@ -1,5 +1,5 @@
 defaultSettings:
-  defaultDataPath: "/opt/longhorn_data/"
+  defaultDataPath: "/var/lib/longhorn/"
 ingress:
   enabled: true
   ingressClassName: "traefik"
