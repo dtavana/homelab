@@ -17,16 +17,15 @@ echo
 
 # --- STEP 1: Configure Base OS ---
 echo "STEP 1: Configuring base OS on nodes as user '$TEMP_USER'..."
-echo "You will be prompted for passwords in the following order: Vault, SSH, then SUDO."
-ansible-playbook playbooks/configure-nodes.yml --user "$TEMP_USER" -k -K --ask-vault-pass
+echo "You will be prompted for the SSH password of each node."
+ansible-playbook playbooks/configure-nodes.yml --user "$TEMP_USER" -k -K --vault-password-file ./vault_pass.txt
 
 echo "✅ Base OS configuration complete."
 echo
 
 # --- STEP 2: Deploy K3s Cluster ---
 echo "STEP 2: Deploying K3s cluster..."
-echo "You will be prompted for your Ansible Vault password again."
-ansible-playbook ../tools/k3s-ansible/site.yml --ask-vault-pass
+ansible-playbook ../tools/k3s-ansible/site.yml --vault-password-file ./vault_pass.txt
 
 echo "✅ K3s deployment complete."
 echo
