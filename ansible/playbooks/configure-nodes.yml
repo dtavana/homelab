@@ -28,6 +28,41 @@
         state: present
         update_cache: yes
 
+    - name: Create 'longhorn-lv' with a fixed size
+      community.general.lvol:
+        vg: ubuntu-vg
+        lv: longhorn-lv
+        size: 350G
+        state: present
+
+    - name: Format the new Longhorn Logical Volume
+      ansible.builtin.filesystem:
+        fstype: ext4
+        dev: /dev/ubuntu-vg/longhorn-lv
+        state: present
+
+    - name: Create mount point directory for Longhorn
+      ansible.builtin.file:
+        path: /var/lib/longhorn
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Get UUID of the new Longhorn LV
+      ansible.builtin.command: blkid -s UUID -o value /dev/mapper/ubuntu--vg-longhorn--lv
+      register: lv_uuid_result
+      changed_when: false
+      check_mode: no
+
+    - name: Configure /etc/fstab to auto-mount Longhorn volume by UUID
+      ansible.posix.mount:
+        name: /var/lib/longhorn
+        src: "UUID={{ lv_uuid_result.stdout }}"
+        fstype: ext4
+        opts: defaults
+        state: mounted
+
     - name: Ensure UFW firewall is disabled for cluster communication
       ansible.builtin.ufw:
         state: disabled

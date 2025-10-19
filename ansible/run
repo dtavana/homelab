@@ -1,0 +1,34 @@
+#!/bin/bash
+# Script to run a single ad-hoc command on all k3s cluster nodes.
+
+# Exit immediately if any command fails.
+set -e
+
+# --- Configuration (Relative to this script's location) ---
+INVENTORY_PATH="./inventory/hosts.ini"
+VAULT_PASS_FILE="./vault_pass.txt"
+REMOTE_USER="k3s"
+
+# Check if a command was provided as an argument.
+if [ -z "$1" ]; then
+    echo "❌ Error: No command provided."
+    echo "Usage: ./run.sh <command_to_execute>"
+    echo "Example: ./run.sh \"sudo kubectl get nodes\""
+    exit 1
+fi
+
+# Join all arguments into a single string to be passed to Ansible's -a flag
+FULL_COMMAND="$*"
+
+# --- Execute Ansible Ad-Hoc Command ---
+
+echo "🚀 Running command on k3s_cluster as user '$REMOTE_USER': $FULL_COMMAND"
+
+# Execute the command. The -a flag requires the command to be quoted.
+# The user's SSH key must be loaded via 'ssh-add'.
+ansible k3s_cluster \
+    -m ansible.builtin.command \
+    -a "$FULL_COMMAND" \
+    -i "$INVENTORY_PATH" \
+    --user "$REMOTE_USER" \
+    --vault-password-file "$VAULT_PASS_FILE"
