@@ -12,6 +12,11 @@ serviceDns:
 podDnsConfig:
   enabled: false
 
+dnsmasq:
+  enableCustomDnsMasq: true
+  customDnsEntries:
+    - address=/cube.local/192.168.0.33
+
 capabilities:
   add:
     - NET_ADMIN
