@@ -1,7 +1,7 @@
 persistentVolumeClaim:
   enabled: true
   size: 2Gi
-  storageClassName: longhorn
+  storageClass: longhorn
 
 serviceWeb:
   type: LoadBalancer
