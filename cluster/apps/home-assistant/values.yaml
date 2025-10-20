@@ -7,7 +7,7 @@ persistence:
 
 ingress:
   enabled: true
-  ingressClassName: "nginx"
+  className: "nginx"
   hosts:
     - host: "hass.cube.local"
       paths:
