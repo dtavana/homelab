@@ -8,3 +8,4 @@ resources:
   - storage-kustomization.yaml
   - infra-kustomization.yaml
   - monitoring-kustomization.yaml
+  - networking-kustomization.yaml
