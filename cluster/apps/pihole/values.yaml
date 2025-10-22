@@ -15,7 +15,7 @@ podDnsConfig:
 dnsmasq:
   enableCustomDnsMasq: true
   customDnsEntries:
-    - address=/cube.local/192.168.0.33
+    - address=/internal.dtavana.dev/192.168.0.34
 
 capabilities:
   add:
