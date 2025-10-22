@@ -4,6 +4,6 @@ resources:
   - ../../base/portainer
 configMapGenerator:
   - name: portainer-values
-    namespace: portainer
+    namespace: portainer-system
     files:
       - values.yaml=./values.yaml

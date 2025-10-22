@@ -4,6 +4,6 @@ resources:
   - ../../base/pihole
 configMapGenerator:
   - name: pihole-values
-    namespace: pihole
+    namespace: pihole-system
     files:
       - values.yaml=./values.yaml
