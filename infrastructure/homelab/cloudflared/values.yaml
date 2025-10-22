@@ -4,6 +4,9 @@ tunnelSecrets:
   existingPemFileSecret:
     name: "unused"
 
+tunnelConfig:
+  name: "homelab"
+
 ingress:
   - hostname: hass.dtavana.dev
     service: http://nginx-system-nginx-ingress-nginx-controller.nginx-system.svc.cluster.local
