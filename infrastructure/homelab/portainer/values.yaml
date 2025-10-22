@@ -10,7 +10,7 @@ ingress:
   enabled: true
   ingressClassName: "nginx"
   hosts:
-    - host: "portainer.cube.local"
+    - host: "portainer.internal.dtavana.dev"
       paths:
         - path: /
           pathType: Prefix

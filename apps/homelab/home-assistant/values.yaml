@@ -9,7 +9,7 @@ ingress:
   enabled: true
   className: "nginx"
   hosts:
-    - host: "hass.cube.local"
+    - host: "hass.dtavana.dev"
       paths:
         - path: /
           pathType: Prefix

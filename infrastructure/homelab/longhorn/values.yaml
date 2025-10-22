@@ -3,6 +3,6 @@ defaultSettings:
 ingress:
   enabled: true
   ingressClassName: "nginx"
-  host: "longhorn.cube.local"
+  host: "longhorn.internal.dtavana.dev"
   path: /
   pathType: Prefix
