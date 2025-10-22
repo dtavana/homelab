@@ -4,6 +4,7 @@ generatorOptions:
   disableNameSuffixHash: true
 resources:
   - ../../base/cloudflared
+  - cert-secret.sops.yaml
   - tunnel-secret.sops.yaml
 configMapGenerator:
   - name: cloudflared-values

@@ -2,7 +2,7 @@ tunnelSecrets:
   existingConfigJsonFileSecret:
     name: "cloudflared-credentials"
   existingPemFileSecret:
-    name: "unused"
+    name: "cloudflared-cert"
 
 tunnelConfig:
   name: "homelab"
