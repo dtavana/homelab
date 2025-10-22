@@ -1,0 +1,19 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: cloudflared
+  namespace: cloudflared-system
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: cloudflared
+      version: "2025.10.0"
+      sourceRef:
+        kind: HelmRepository
+        name: community-charts-repo-repo
+        namespace: flux-system
+  targetNamespace: cloudflared-system
+  valuesFrom:
+    - kind: ConfigMap
+      name: cloudflared-values
