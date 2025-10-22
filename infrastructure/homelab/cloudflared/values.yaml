@@ -2,7 +2,7 @@ tunnelSecrets:
   existingConfigJsonFileSecret:
     name: "cloudflared-credentials"
   existingPemFileSecret:
-    name: null
+    name: "unused"
 
 ingress:
   - hostname: hass.dtavana.dev
