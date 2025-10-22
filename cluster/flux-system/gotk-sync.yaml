@@ -29,4 +29,3 @@ spec:
     provider: "sops"
     secretRef:
       name: "sops-pgp"
-      namespace: "flux-system"
