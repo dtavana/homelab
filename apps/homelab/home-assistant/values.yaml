@@ -20,6 +20,29 @@ configuration:
   trusted_proxies:
     - "10.42.0.0/16"
     - "10.43.0.0/16"
+    - "192.168.0.33"
+    - "127.0.0.1/8"
+
+  templateConfig: |-
+    default_config:
+
+    homeassistant:
+      external_url: "https://hass.dtavana.dev"
+
+    {{- if or .Values.ingress.enabled .Values.ingress.external }}
+    http:
+      use_x_forwarded_for: true
+      trusted_proxies:
+        {{- range .Values.configuration.trusted_proxies }}
+        - {{ . }}
+        {{- end }}
+    {{- end}}
+    frontend:
+      themes: !include_dir_merge_named themes
+
+    automation: !include automations.yaml
+    script: !include scripts.yaml
+    scene: !include scenes.yaml
 
 env:
   - name: TZ
