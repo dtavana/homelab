@@ -4,3 +4,4 @@ namespace: nginx-system
 resources:
   - namespace.yaml
   - helmrelease.yaml
+  - helmrelease-internal.yaml

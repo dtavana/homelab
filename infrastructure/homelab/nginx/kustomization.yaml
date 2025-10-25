@@ -9,3 +9,7 @@ configMapGenerator:
     namespace: nginx-system
     files:
       - values.yaml=./values.yaml
+  - name: nginx-internal-values
+    namespace: nginx-system
+    files:
+      - values.yaml=./values-internal.yaml
