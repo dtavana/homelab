@@ -1,0 +1,12 @@
+controller:
+  ingressClassResource:
+    name: nginx-internal
+    enabled: true
+    default: false
+    controllerValue: "k8s.io/internal-nginx"
+  service:
+    type: LoadBalancer
+    loadBalancerSourceRanges:
+      - "192.168.0.1/24"
+      - "10.42.0.0/16"
+      - "10.43.0.0/16"

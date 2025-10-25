@@ -2,13 +2,11 @@ persistence:
   enabled: true
   storageClass: "longhorn"
   size: "2Gi"
-
 service:
   type: ClusterIP
-
 ingress:
   enabled: true
-  ingressClassName: "nginx"
+  ingressClassName: "nginx-internal"
   hosts:
     - host: "portainer.internal.dtavana.dev"
       paths:

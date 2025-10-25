@@ -1,7 +1,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: nginx
+  name: nginx-internal
   namespace: nginx-system
 spec:
   interval: 15m
@@ -20,4 +20,4 @@ spec:
     crds: CreateReplace
   valuesFrom:
     - kind: ConfigMap
-      name: nginx-values
+      name: nginx-internal-values

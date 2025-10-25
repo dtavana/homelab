@@ -2,7 +2,7 @@ defaultSettings:
   defaultDataPath: "/var/lib/longhorn/"
 ingress:
   enabled: true
-  ingressClassName: "nginx"
+  ingressClassName: "nginx-internal"
   host: "longhorn.internal.dtavana.dev"
   path: /
   pathType: Prefix
