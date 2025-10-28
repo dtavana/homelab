@@ -17,9 +17,11 @@ spec:
       labels:
         app: matter-server
     spec:
+      imagePullSecrets:
+        - name: ghcr-creds
       containers:
         - name: matter-server
-          image: ghcr.io/home-assistant/matter-server:latest
+          image: ghcr.io/home-assistant-libs/python-matter-server:stable
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5580
