@@ -2,21 +2,16 @@ persistentVolumeClaim:
   enabled: true
   size: 2Gi
   storageClass: longhorn
-
 serviceWeb:
   type: LoadBalancer
-
 serviceDns:
   type: LoadBalancer
-
 podDnsConfig:
   enabled: false
-
 dnsmasq:
   enableCustomDnsMasq: true
   customDnsEntries:
     - address=/internal.dtavana.dev/192.168.0.34
-
 capabilities:
   add:
     - NET_ADMIN
