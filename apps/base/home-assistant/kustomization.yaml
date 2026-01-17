@@ -9,3 +9,4 @@ resources:
   - service-matter-server.yaml
 
   - ../../../infrastructure/homelab/ghcr-creds
+
