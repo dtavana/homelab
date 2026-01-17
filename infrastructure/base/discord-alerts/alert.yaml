@@ -8,15 +8,9 @@ spec:
     name: discord-provider
   eventSeverity: info
   eventSources:
-    - kind: Kustomization
-      name: ".*"
-      namespace: ".*"
     - kind: HelmRelease
-      name: ".*"
-      namespace: ".*"
+      name: "*"
+      namespace: flux-system
     - kind: GitRepository
       name: "flux-system"
-      namespace: "flux-system"
-    - kind: HelmRepository
-      name: ".*"
       namespace: "flux-system"
