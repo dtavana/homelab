@@ -12,5 +12,7 @@
   ],
   "flux": {
     "fileMatch": ["\\.yaml$"]
-  }
+  },
+  "prHourlyLimit": 0,
+  "prConcurrentLimit": 0
 }
