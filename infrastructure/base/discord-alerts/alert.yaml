@@ -9,14 +9,14 @@ spec:
   eventSeverity: info
   eventSources:
     - kind: Kustomization
-      name: "*"
-      namespace: "*"
+      name: ".*"
+      namespace: ".*"
     - kind: HelmRelease
-      name: "*"
-      namespace: "*"
+      name: ".*"
+      namespace: ".*"
     - kind: GitRepository
       name: "flux-system"
       namespace: "flux-system"
     - kind: HelmRepository
-      name: "*"
+      name: ".*"
       namespace: "flux-system"
