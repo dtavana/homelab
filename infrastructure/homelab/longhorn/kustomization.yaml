@@ -6,6 +6,6 @@ resources:
   - ../../base/longhorn
 configMapGenerator:
   - name: longhorn-values
-    namespace: longhorn-system
+    namespace: flux-system
     files:
       - values.yaml=./values.yaml
