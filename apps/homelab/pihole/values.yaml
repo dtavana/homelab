@@ -12,6 +12,18 @@ dnsmasq:
   enableCustomDnsMasq: true
   customDnsEntries:
     - address=/internal.dtavana.dev/192.168.0.34
+ingress:
+  enabled: true
+  ingressClassName: nginx-internal
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+  hosts:
+    - pihole.internal.dtavana.dev
+  tls:
+    - secretName: pihole-tls
+      hosts:
+        - pihole.internal.dtavana.dev
+
 capabilities:
   add:
     - NET_ADMIN
