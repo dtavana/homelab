@@ -6,6 +6,6 @@ resources:
   - ../../base/pihole
 configMapGenerator:
   - name: pihole-values
-    namespace: pihole-system
+    namespace: flux-system
     files:
       - values.yaml=./values.yaml

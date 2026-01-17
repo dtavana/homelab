@@ -6,6 +6,6 @@ resources:
   - ../../base/home-assistant
 configMapGenerator:
   - name: home-assistant-values
-    namespace: hass-system
+    namespace: flux-system
     files:
       - values.yaml=./values.yaml

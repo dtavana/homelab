@@ -8,6 +8,6 @@ resources:
   - tunnel-secret.sops.yaml
 configMapGenerator:
   - name: cloudflared-values
-    namespace: cloudflared-system
+    namespace: flux-system
     files:
       - values.yaml=./values.yaml

@@ -6,10 +6,10 @@ resources:
   - ../../base/nginx
 configMapGenerator:
   - name: nginx-values
-    namespace: nginx-system
+    namespace: flux-system
     files:
       - values.yaml=./values.yaml
   - name: nginx-internal-values
-    namespace: nginx-system
+    namespace: flux-system
     files:
       - values.yaml=./values-internal.yaml
