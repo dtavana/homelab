@@ -7,3 +7,4 @@ resources:
   - nginx-helmrepo.yaml
   - pihole-helmrepo.yaml
   - portainer-helmrepo.yaml
+  - jetstack-helmrepo.yaml

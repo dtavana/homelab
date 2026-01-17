@@ -6,3 +6,7 @@ ingress:
   host: "longhorn.internal.dtavana.dev"
   path: /
   pathType: Prefix
+  tls: true
+  tlsSecret: longhorn-tls
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
