@@ -9,5 +9,8 @@
       "matchDatasources": ["helm"],
       "separateMinorPatch": true
     }
-  ]
+  ],
+  "flux": {
+    "fileMatch": ["\\.yaml$"]
+  }
 }
