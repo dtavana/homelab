@@ -1,0 +1,13 @@
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Alert
+metadata:
+  name: helm-alert
+  namespace: flux-system
+spec:
+  providerRef:
+    name: discord-provider-critical
+  eventSeverity: error
+  eventSources:
+    - kind: HelmRelease
+      name: "*"
+      namespace: flux-system

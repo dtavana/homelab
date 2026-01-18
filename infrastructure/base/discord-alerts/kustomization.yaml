@@ -1,5 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - alert.yaml
   - provider.yaml
+  - provider-critical.yaml
+  - git-alert.yaml
+  - helm-alert.yaml

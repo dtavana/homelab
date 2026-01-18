@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - ../../base/discord-alerts
   - url-secret.sops.yaml
+  - url-secret-critical.sops.yaml
