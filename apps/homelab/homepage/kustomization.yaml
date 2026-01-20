@@ -3,7 +3,7 @@ kind: Kustomization
 generatorOptions:
   disableNameSuffixHash: true
 resources:
-  - ../../../base/homepage
+  - ../../base/homepage
   - config.yaml
 
 patches:
