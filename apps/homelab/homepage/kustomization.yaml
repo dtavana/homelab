@@ -6,7 +6,8 @@ resources:
   - ../../base/homepage
   - config.yaml
 
-patches:
-  - path: values.yaml
-    target:
-      kind: HelmRelease
+configMapGenerator:
+  - name: homepage-values
+    namespace: flux-system
+    files:
+      - values.yaml=./values.yaml
