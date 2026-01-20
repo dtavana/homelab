@@ -37,11 +37,3 @@ data:
   kubernetes.yaml: |
     cluster:
       mode: cluster
-
-  # Empty files to silence EROFS errors
-  bookmarks.yaml: |
-    []
-  docker.yaml: |
-    # Docker configuration
-  custom.css: |
-    /* Custom CSS */

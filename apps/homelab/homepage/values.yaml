@@ -15,16 +15,26 @@ rbac:
   # The chart's valid key is 'enabled' or 'create'? Upstream says 'enabled: true'.
   # But user's generated file showed 'create: true'.
   # Checking upstream values again: 
-  # rbac: enabled: true
   enabled: true
   create: true 
 
-# Mount the config files from the secondary ConfigMap
+# Standard SubPath Mounting (Clean & Supported by Chart)
+# This mounts our custom files INTO the default writable /app/config/ directory.
 volumes:
-  - name: config
+  - name: extra-config
     configMap:
       name: homepage-config
 
 volumeMounts:
-  - name: config
-    mountPath: /app/config
+  - name: extra-config
+    mountPath: /app/config/settings.yaml
+    subPath: settings.yaml
+  - name: extra-config
+    mountPath: /app/config/services.yaml
+    subPath: services.yaml
+  - name: extra-config
+    mountPath: /app/config/widgets.yaml
+    subPath: widgets.yaml
+  - name: extra-config
+    mountPath: /app/config/kubernetes.yaml
+    subPath: kubernetes.yaml
