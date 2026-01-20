@@ -18,9 +18,11 @@ rbac:
   enabled: true
   create: true 
 
-# Standard SubPath Mounting (Clean & Supported by Chart)
-# This mounts our custom files INTO the default writable /app/config/ directory.
+# Standard SubPath Mounting
+# We MUST redefine the 'config' volume because defining 'volumes' overwrites the default list.
 volumes:
+  - name: config
+    emptyDir: {}
   - name: extra-config
     configMap:
       name: homepage-config
