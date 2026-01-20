@@ -21,6 +21,7 @@ ingress:
   ingressClassName: nginx-internal
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
+    nginx.ingress.kubernetes.io/app-root: /admin
   hosts:
     - pihole.internal.dtavana.dev
   tls:
