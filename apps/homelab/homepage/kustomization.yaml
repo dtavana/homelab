@@ -9,3 +9,10 @@ configMapGenerator:
     namespace: flux-system
     files:
       - values.yaml=./values.yaml
+  - name: homepage-config
+    namespace: homepage-system
+    files:
+      - settings.yaml=./settings.yaml
+      - services.yaml=./services.yaml
+      - widgets.yaml=./widgets.yaml
+      - kubernetes.yaml=./kubernetes.yaml
