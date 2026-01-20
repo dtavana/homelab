@@ -1,0 +1,48 @@
+ingress:
+  main:
+    enabled: true
+    ingressClassName: nginx
+    hosts:
+      - host: home.dtavana.dev
+        paths:
+          - path: /
+            pathType: Prefix
+
+# Service Discovery Configuration
+serviceAccount:
+  create: true
+  name: homepage
+
+rbac:
+  create: true
+
+# Application Configuration
+config:
+  kubernetes:
+    cluster:
+      mode: cluster
+
+  settings:
+    title: "dtavana Homelab"
+    background: https://images.unsplash.com/photo-1502790671504-542ad42d5189?auto=format&fit=crop&w=2560&q=80
+    theme: dark
+
+  widgets:
+    - resources:
+        cpu: true
+        memory: true
+        disk: /
+
+  services:
+    - External:
+        - Home Assistant:
+            href: https://hass.dtavana.dev
+            description: Smart Home Control
+            icon: home-assistant.png
+    
+    - Internal:
+        - Pihole:
+            href: http://pihole-web.pihole-system.svc.cluster.local/admin/
+            description: Network ad-blocking (Internal Only)
+            icon: pihole.png
+            # Note: This link will only work if you are on the internal network or correct DNS setup
