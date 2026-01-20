@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: homepage-config
+  namespace: homepage-system
+  labels:
+    app.kubernetes.io/name: homepage
+    app.kubernetes.io/instance: homepage
+data:
+  # Core Settings
+  settings.yaml: |
+    title: "dtavana Homelab"
+    background: https://images.unsplash.com/photo-1502790671504-542ad42d5189?auto=format&fit=crop&w=2560&q=80
+    theme: dark
+
+  # Services
+  services.yaml: |
+    - External:
+        - Home Assistant:
+            href: https://hass.dtavana.dev
+            description: Smart Home Control
+            icon: home-assistant.png
+    - Internal:
+        - Pihole:
+            href: http://pihole-web.pihole-system.svc.cluster.local/admin/
+            description: Network ad-blocking (Internal Only)
+            icon: pihole.png
+
+  # Widgets
+  widgets.yaml: |
+    - resources:
+        cpu: true
+        memory: true
+        disk: /
+
+  # Kubernetes
+  kubernetes.yaml: |
+    cluster:
+      mode: cluster
+
+  # Empty files to silence EROFS errors
+  bookmarks.yaml: |
+    []
+  docker.yaml: |
+    # Docker configuration
+  custom.css: |
+    /* Custom CSS */

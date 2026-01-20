@@ -3,16 +3,10 @@ kind: Kustomization
 generatorOptions:
   disableNameSuffixHash: true
 resources:
-  - ../../base/homepage
-configMapGenerator:
-  - name: homepage-values
-    namespace: flux-system
-    files:
-      - values.yaml=./values.yaml
-  - name: homepage-config
-    namespace: homepage-system
-    files:
-      - settings.yaml=./settings.yaml
-      - services.yaml=./services.yaml
-      - widgets.yaml=./widgets.yaml
-      - kubernetes.yaml=./kubernetes.yaml
+  - ../../../base/homepage
+  - config.yaml
+
+patches:
+  - path: values.yaml
+    target:
+      kind: HelmRelease
