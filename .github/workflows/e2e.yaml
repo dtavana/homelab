@@ -1,0 +1,86 @@
+name: E2E Verification
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Kubernetes
+        uses: helm/kind-action@v1.8.0
+
+      - name: Setup Flux
+        uses: fluxcd/flux2/action@v2.2.0
+
+      - name: Setup Secrets
+        env:
+          PGP_KEY: ${{ secrets.SOPS_PGP_KEY }}
+        run: |
+            kubectl create namespace flux-system --dry-run=client -o yaml | kubectl apply -f -
+            echo "$PGP_KEY" > sops.asc
+            kubectl create secret generic sops-pgp \
+              --namespace=flux-system \
+              --from-file=sops.asc=sops.asc
+
+      - name: Patch Flux Source (PR/Branch)
+        run: |
+            # We want to test THIS code, not main
+            # 1. Change URL to HTTPS (so we don't need SSH keys for public repo)
+            # 2. Change Ref to the current commit SHA
+            
+            sed -i 's|url: ssh://git@github.com/dtavana/homelab|url: https://github.com/dtavana/homelab|g' clusters/homelab/flux-system/gotk-sync.yaml
+            
+            # Use sed to replace the branch info with the specific commit reference
+            # Using current SHA ensures we test exactly what is here
+            sed -i 's|branch: main|commit: ${{ github.sha }}|g' clusters/homelab/flux-system/gotk-sync.yaml
+            
+            cat clusters/homelab/flux-system/gotk-sync.yaml
+
+      - name: Patch LoadBalancers (No MetalLB in CI)
+        run: |
+            # Find all files containing "type: LoadBalancer" and change to "type: ClusterIP"
+            # This prevents Helm waits from timing out waiting for external IPs
+            grep -rl "type: LoadBalancer" apps || true | xargs -I {} sed -i 's|type: LoadBalancer|type: ClusterIP|g' {}
+
+      - name: Patch Cloudflared (Prevent Production Tunnel Conflict)
+        run: |
+            # Prevent cloudflared from starting and stealing the production tunnel
+            # We want to verify the HelmRelease installs, but not the pod
+            # Use 'kubectl patch' (if it allows) wouldn't work before apply.
+            # Instead, we patch the Helm values in the file if possible, or just accept the risk?
+            # Better strategy: Patch the specific HelmRelease to set replicaCount: 0 if valid, 
+            # Or simpler: Append a replicaCount override to the values file?
+            # Actually, `cloudflared` chart usually has `replicaCount`. 
+            # Let's try to patch the values file if we can find it.
+            
+            # Searching for cloudflared values... assuming infrastructure/homelab/cloudflared/values.yaml
+            if [ -f "infrastructure/homelab/cloudflared/values.yaml" ]; then
+              echo "replicaCount: 0" >> infrastructure/homelab/cloudflared/values.yaml
+            fi
+
+      - name: Install Flux Components
+        run: kubectl apply -f clusters/homelab/gotk-components.yaml
+
+      - name: Apply Cluster Config
+        run: |
+          # Apply the sync manifests
+          kubectl apply -f clusters/homelab/kustomization.yaml
+          kubectl apply -f clusters/homelab/flux-system/gotk-sync.yaml
+          
+      - name: Verify Reconciliation
+        run: |
+          echo "Waiting for Flux System reconciliation..."
+          flux reconcile kustomization flux-system --with-source
+          
+          echo "Waiting for Apps and Infrastructure..."
+          # Max timeout 10m to allow for image pulls and startup
+          kubectl wait --for=condition=ready kustomization/apps -n flux-system --timeout=10m
+          kubectl wait --for=condition=ready kustomization/infrastructure -n flux-system --timeout=10m
