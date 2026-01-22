@@ -1,0 +1,42 @@
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  hosts:
+    - host: home.dtavana.dev
+      paths:
+        - path: /
+          pathType: Prefix
+
+serviceAccount:
+  create: true
+  name: homepage
+
+rbac:
+  # The chart's valid key is 'enabled' or 'create'? Upstream says 'enabled: true'.
+  # But user's generated file showed 'create: true'.
+  # Checking upstream values again: 
+  enabled: true
+  create: true 
+
+# Standard SubPath Mounting
+# We MUST redefine the 'config' volume because defining 'volumes' overwrites the default list.
+volumes:
+  - name: config
+    emptyDir: {}
+  - name: extra-config
+    configMap:
+      name: homepage-config
+
+volumeMounts:
+  - name: extra-config
+    mountPath: /app/config/settings.yaml
+    subPath: settings.yaml
+  - name: extra-config
+    mountPath: /app/config/services.yaml
+    subPath: services.yaml
+  - name: extra-config
+    mountPath: /app/config/widgets.yaml
+    subPath: widgets.yaml
+  - name: extra-config
+    mountPath: /app/config/kubernetes.yaml
+    subPath: kubernetes.yaml

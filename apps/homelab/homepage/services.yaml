@@ -1,0 +1,12 @@
+- External:
+    - Home Assistant:
+        href: https://hass.dtavana.dev
+        description: Smart Home Control
+        icon: home-assistant.png
+
+- Internal:
+    - Pihole:
+        href: http://pihole-web.pihole-system.svc.cluster.local/admin/
+        description: Network ad-blocking (Internal Only)
+        icon: pihole.png
+        # Note: This link will only work if you are on the internal network or correct DNS setup
