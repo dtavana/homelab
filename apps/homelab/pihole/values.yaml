@@ -11,7 +11,7 @@ podDnsConfig:
 dnsmasq:
   enableCustomDnsMasq: true
   customDnsEntries:
-    - address=/internal.dtavana.dev/192.168.0.34
+    - address=/internal.dtavana.dev/192.168.0.30
 ingress:
   enabled: true
   ingressClassName: nginx-internal
