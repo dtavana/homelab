@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: govee2mqtt
+  namespace: apps
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: govee2mqtt
+  template:
+    metadata:
+      labels:
+        app: govee2mqtt
+    spec:
+      containers:
+        - name: govee2mqtt
+          image: ghcr.io/wez/govee2mqtt:latest
+          env:
+            - name: MQTT_HOST
+              value: "mqtt-broker.infrastructure.svc.cluster.local"
+            - name: MQTT_PORT
+              value: "1883"
+          envFrom:
+            - secretRef:
+                name: govee-credentials
+          ports:
+            - containerPort: 8080
+              name: http

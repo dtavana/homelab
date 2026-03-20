@@ -8,3 +8,4 @@ resources:
   - pihole-helmrepo.yaml
   - portainer-helmrepo.yaml
   - jetstack-helmrepo.yaml
+  - mqtt-broker-helmrepo.yaml
