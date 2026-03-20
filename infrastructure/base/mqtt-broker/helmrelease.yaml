@@ -13,7 +13,7 @@ spec:
         kind: HelmRepository
         name: mqtt-broker-repo
         namespace: flux-system
-  targetNamespace: infrastructure
+  targetNamespace: mqtt-broker-system
   install:
     crds: Create
   upgrade:
