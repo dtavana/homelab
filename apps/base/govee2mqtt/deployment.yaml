@@ -17,9 +17,9 @@ spec:
         - name: govee2mqtt
           image: ghcr.io/wez/govee2mqtt:latest
           env:
-            - name: MQTT_HOST
+            - name: GOVEE_MQTT_HOST
               value: "mosquitto.mqtt-broker-system.svc.cluster.local"
-            - name: MQTT_PORT
+            - name: GOVEE_MQTT_PORT
               value: "1883"
           envFrom:
             - secretRef:
