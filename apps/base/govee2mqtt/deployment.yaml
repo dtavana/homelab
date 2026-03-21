@@ -25,5 +25,5 @@ spec:
             - secretRef:
                 name: govee-credentials
           ports:
-            - containerPort: 8080
+            - containerPort: 8056
               name: http

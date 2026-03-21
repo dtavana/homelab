@@ -21,4 +21,4 @@ spec:
               service:
                 name: govee2mqtt
                 port:
-                  number: 8080
+                  number: 8056
