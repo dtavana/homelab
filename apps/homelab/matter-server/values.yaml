@@ -20,9 +20,12 @@ service:
       http:
         port: 5580
 persistence:
-  data:
+  config:
     enabled: true
-    existingClaim: matter-server-config
+    type: persistentVolumeClaim
+    storageClass: longhorn
+    accessMode: ReadWriteOnce
+    size: 1Gi
     globalMounts:
       - path: /data
 defaultPodOptions:
