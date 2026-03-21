@@ -1,9 +1,6 @@
 controllers:
   main:
     type: deployment
-    annotations:
-      reloader.stakater.com/auto: "true"
-    hostNetwork: true
     containers:
       main:
         image:
@@ -29,6 +26,7 @@ persistence:
     globalMounts:
       - path: /data
 defaultPodOptions:
+  hostNetwork: true
   dnsPolicy: ClusterFirstWithHostNet
   imagePullSecrets:
     - name: ghcr-creds
