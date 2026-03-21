@@ -7,6 +7,7 @@ controller:
   service:
     type: LoadBalancer
     loadBalancerSourceRanges:
-      - "192.168.0.1/24"
+      - "192.168.0.0/24"
+      - "10.5.5.0/24"
       - "10.42.0.0/16"
       - "10.43.0.0/16"
