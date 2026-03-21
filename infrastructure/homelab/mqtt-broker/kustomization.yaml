@@ -4,6 +4,7 @@ generatorOptions:
   disableNameSuffixHash: true
 resources:
   - ../../base/mqtt-broker
+  - ./ingress.yaml
 configMapGenerator:
   - name: mqtt-broker-values
     namespace: flux-system
