@@ -18,7 +18,7 @@ spec:
           image: ghcr.io/wez/govee2mqtt:latest
           env:
             - name: MQTT_HOST
-              value: "mqtt-broker.mqtt-broker-system.svc.cluster.local"
+              value: "mosquitto.mqtt-broker-system.svc.cluster.local"
             - name: MQTT_PORT
               value: "1883"
           envFrom:
