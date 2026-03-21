@@ -4,6 +4,7 @@ metadata:
   name: daily-backup
   namespace: longhorn-system
 spec:
+  name: "daily-backup"
   cron: "0 4 * * *"
   task: "backup"
   groups:
