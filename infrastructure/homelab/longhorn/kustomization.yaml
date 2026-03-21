@@ -4,6 +4,8 @@ generatorOptions:
   disableNameSuffixHash: true
 resources:
   - ../../base/longhorn
+  - longhorn-backup-secret.sops.yaml
+  - recurring-job.yaml
 configMapGenerator:
   - name: longhorn-values
     namespace: flux-system

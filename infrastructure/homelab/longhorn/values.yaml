@@ -1,5 +1,8 @@
 defaultSettings:
   defaultDataPath: "/var/lib/longhorn/"
+defaultBackupStore:
+  backupTarget: "s3://dtavana-longhorn-backups@us-east1/"
+  backupTargetCredentialSecret: "longhorn-backup-secret"
 ingress:
   enabled: true
   ingressClassName: "nginx-internal"
