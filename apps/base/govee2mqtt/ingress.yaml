@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: govee2mqtt
+  namespace: hass-system
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+spec:
+  ingressClassName: nginx-internal
+  tls:
+    - hosts:
+        - govee2mqtt.internal.dtavana.dev
+      secretName: govee2mqtt-tls
+  rules:
+    - host: govee2mqtt.internal.dtavana.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: govee2mqtt
+                port:
+                  number: 8080
