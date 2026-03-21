@@ -1,0 +1,29 @@
+controllers:
+  main:
+    containers:
+      main:
+        image:
+          repository: emqx/mqttx-web
+          tag: latest
+service:
+  main:
+    controller: main
+    ports:
+      http:
+        port: 80
+ingress:
+  main:
+    className: nginx-internal
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-production
+    hosts:
+      - host: mqttx.internal.dtavana.dev
+        paths:
+          - path: /
+            service:
+              identifier: main
+              port: http
+    tls:
+      - hosts:
+          - mqttx.internal.dtavana.dev
+        secretName: mqttx-tls

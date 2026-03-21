@@ -9,3 +9,4 @@ resources:
   - portainer-helmrepo.yaml
   - jetstack-helmrepo.yaml
   - mqtt-broker-helmrepo.yaml
+  - app-template-helmrepo.yaml

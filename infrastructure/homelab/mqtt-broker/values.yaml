@@ -1,2 +1,4 @@
 persistence:
   storageClass: "longhorn"
+service:
+  websocketPort: 9001
