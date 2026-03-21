@@ -1,0 +1,34 @@
+controllers:
+  main:
+    type: deployment
+    annotations:
+      reloader.stakater.com/auto: "true"
+    hostNetwork: true
+    containers:
+      main:
+        image:
+          repository: ghcr.io/home-assistant-libs/python-matter-server
+          tag: stable
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 250m
+            memory: 256Mi
+service:
+  main:
+    controller: main
+    ports:
+      http:
+        port: 5580
+persistence:
+  data:
+    enabled: true
+    existingClaim: matter-server-config
+    globalMounts:
+      - path: /data
+defaultPodOptions:
+  dnsPolicy: ClusterFirstWithHostNet
+  imagePullSecrets:
+    - name: ghcr-creds

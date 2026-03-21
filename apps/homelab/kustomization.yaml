@@ -5,3 +5,4 @@ resources:
   - ./pihole
   - ./govee2mqtt
   - ./mqttx
+  - ./matter-server
