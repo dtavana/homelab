@@ -1,0 +1,35 @@
+controllers:
+  main:
+    containers:
+      main:
+        image:
+          repository: ghcr.io/wez/govee2mqtt
+          tag: latest
+        env:
+          GOVEE_MQTT_HOST: mosquitto.mqtt-broker-system.svc.cluster.local
+          GOVEE_MQTT_PORT: 1883
+        envFrom:
+          - secretRef:
+              name: govee-credentials
+service:
+  main:
+    controller: main
+    ports:
+      http:
+        port: 8056
+ingress:
+  main:
+    className: nginx-internal
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-production
+    hosts:
+      - host: govee2mqtt.internal.dtavana.dev
+        paths:
+          - path: /
+            service:
+              identifier: main
+              port: http
+    tls:
+      - hosts:
+          - govee2mqtt.internal.dtavana.dev
+        secretName: govee2mqtt-tls
