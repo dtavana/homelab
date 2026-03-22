@@ -6,3 +6,4 @@ resources:
   - ./govee2mqtt
   - ./mqttx
   - ./matter-server
+  - ./zigbee2mqtt
