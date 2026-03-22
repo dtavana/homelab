@@ -1,6 +1,5 @@
 ignore: |
   tools/k3s-ansible/
-
 extends: default
 rules:
   brackets:

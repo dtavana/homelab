@@ -1,6 +1,5 @@
 exclude:
   - tools/k3s-ansible/**
-
 formatter:
   type: basic
   indent: 2
