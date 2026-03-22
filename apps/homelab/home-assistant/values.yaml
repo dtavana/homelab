@@ -4,7 +4,6 @@ persistence:
   storageClass: "longhorn"
   accessMode: ReadWriteOnce
   size: "10Gi"
-
 ingress:
   enabled: true
   className: "nginx"
@@ -13,18 +12,15 @@ ingress:
       paths:
         - path: /
           pathType: Prefix
-
 configuration:
   enabled: true
   forceInit: false
   trusted_proxies:
     - "10.42.0.0/16"
     - "10.43.0.0/16"
-
 env:
   - name: TZ
     value: "America/New_York"
-
 initContainers:
   - name: install-hacs
     image: alpine:latest

@@ -1,0 +1,9 @@
+exclude:
+  - tools/k3s-ansible/**
+
+formatter:
+  type: basic
+  indent: 2
+  include_document_start: false
+  trim_trailing_whitespace: true
+  eof_newline: true

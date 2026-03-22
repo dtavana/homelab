@@ -24,7 +24,6 @@ ingress:
     - secretName: pihole-tls
       hosts:
         - pihole.internal.dtavana.dev
-
 capabilities:
   add:
     - NET_ADMIN

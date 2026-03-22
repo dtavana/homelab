@@ -1,0 +1,45 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: YAML Formatter
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**.yaml'
+      - '**.yml'
+permissions:
+  contents: write
+jobs:
+  yamlfmt:
+    name: YAML Format
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 'stable'
+      - name: Install yamlfmt
+        run: go install github.com/google/yamlfmt/cmd/yamlfmt@latest
+      - name: Run yamlfmt
+        run: |
+          $(go env GOPATH)/bin/yamlfmt .
+      - name: Check for changes
+        id: git-check
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "changes=true" >> "${GITHUB_OUTPUT}"
+          else
+            echo "changes=false" >> "${GITHUB_OUTPUT}"
+          fi
+      - name: Commit changes
+        if: steps.git-check.outputs.changes == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-format YAML files"
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "github-actions[bot]@users.noreply.github.com"
+          commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"

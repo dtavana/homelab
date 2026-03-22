@@ -4,4 +4,3 @@ resources:
   - ../../base/cert-manager
   - cluster-issuers.sops.yaml
   - api-token-secret.sops.yaml
-    
