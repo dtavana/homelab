@@ -73,7 +73,7 @@ jobs:
           } >> "${GITHUB_STEP_SUMMARY}"
       - if: ${{ github.event_name == 'pull_request' && steps.diff.outputs.diff != '' }}
         name: Add Comment
-        uses: marocchino/sticky-pull-request-comment@v2
+        uses: marocchino/sticky-pull-request-comment@v3
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           header: ${{ github.event.pull_request.number }}/${{ matrix.resources }}
