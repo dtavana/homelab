@@ -9,7 +9,7 @@ controllers:
           # MQTT broker
           ZIGBEE2MQTT_CONFIG_MQTT_SERVER: mqtt://mosquitto.mqtt-broker-system.svc.cluster.local:1883
           # Home Assistant MQTT discovery
-          ZIGBEE2MQTT_CONFIG_HOMEASSISTANT: "true"
+          ZIGBEE2MQTT_CONFIG_HOMEASSISTANT_ENABLED: "true"
           # Frontend
           ZIGBEE2MQTT_CONFIG_FRONTEND_PORT: "8080"
           # Zigbee coordinator (SMLIGHT SLZB-06M over TCP)
