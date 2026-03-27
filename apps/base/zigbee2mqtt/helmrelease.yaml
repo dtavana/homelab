@@ -5,7 +5,6 @@ metadata:
   namespace: flux-system
 spec:
   interval: 15m
-  suspend: true
   chart:
     spec:
       chart: app-template
