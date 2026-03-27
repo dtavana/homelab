@@ -10,6 +10,7 @@ controllers:
           ZIGBEE2MQTT_CONFIG_MQTT_SERVER: mqtt://mosquitto.mqtt-broker-system.svc.cluster.local:1883
           # Frontend
           ZIGBEE2MQTT_CONFIG_FRONTEND_PORT: "8080"
+          ZIGBEE2MQTT_CONFIG_FRONTEND: "true"
           # Zigbee coordinator (SMLIGHT SLZB-06M over TCP)
           ZIGBEE2MQTT_CONFIG_SERIAL_PORT: tcp://192.168.0.116:6638
           ZIGBEE2MQTT_CONFIG_SERIAL_ADAPTER: ember
