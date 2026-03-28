@@ -54,4 +54,3 @@ persistence:
       main:
         main:
           - path: /beszel_data
-
