@@ -8,6 +8,17 @@ controllers:
         env:
           PORT: 8090
           TZ: "America/New_York"
+  agent:
+    type: daemonset
+    hostNetwork: true
+    containers:
+      main:
+        image:
+          repository: henrygd/beszel-agent
+          tag: latest
+        env:
+          KEY: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEjWnqu98ZQU+E6z3Pa5h/+hRiF4pWvjUO9410eRBbXw"
+          PORT: "45876"
 service:
   main:
     controller: main
@@ -20,6 +31,8 @@ ingress:
     className: "nginx-internal"
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-production
+      nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+      nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
     hosts:
       - host: "beszel.internal.dtavana.dev"
         paths:
@@ -37,5 +50,8 @@ persistence:
     storageClass: "longhorn"
     accessMode: ReadWriteOnce
     size: "2Gi"
-    globalMounts:
-      - path: /beszel_data
+    advancedMounts:
+      main:
+        main:
+          - path: /beszel_data
+
