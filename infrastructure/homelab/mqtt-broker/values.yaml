@@ -1,3 +1,5 @@
+strategy:
+  type: Recreate
 persistence:
   storageClass: "longhorn"
 service:
