@@ -1,0 +1,14 @@
+ingress:
+  enabled: true
+  ingressClassName: "nginx-internal"
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+  hosts:
+    - host: "headlamp.internal.dtavana.dev"
+      paths:
+        - path: /
+          type: Prefix
+  tls:
+    - secretName: headlamp-tls
+      hosts:
+        - headlamp.internal.dtavana.dev

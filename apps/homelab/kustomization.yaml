@@ -7,3 +7,5 @@ resources:
   - ./mqttx
   - ./matter-server
   - ./zigbee2mqtt
+  - ./headlamp
+  - ./beszel

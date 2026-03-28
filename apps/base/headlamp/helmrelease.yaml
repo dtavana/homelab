@@ -1,0 +1,25 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: headlamp
+  namespace: flux-system
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: headlamp
+      version: "0.41.0"
+      sourceRef:
+        kind: HelmRepository
+        name: headlamp-repo
+        namespace: flux-system
+  targetNamespace: headlamp-system
+  valuesFrom:
+    - kind: ConfigMap
+      name: headlamp-values
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3

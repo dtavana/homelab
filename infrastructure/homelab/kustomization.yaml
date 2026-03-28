@@ -7,5 +7,4 @@ resources:
   - ./cloudflared
   - ./discord-alerts
   - ./longhorn
-  - ./portainer
   - ./mqtt-broker

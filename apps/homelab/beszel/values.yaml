@@ -1,0 +1,41 @@
+controllers:
+  main:
+    containers:
+      main:
+        image:
+          repository: henrygd/beszel
+          tag: latest
+        env:
+          PORT: 8090
+          TZ: "America/New_York"
+service:
+  main:
+    controller: main
+    ports:
+      http:
+        port: 8090
+ingress:
+  main:
+    enabled: true
+    className: "nginx-internal"
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-production
+    hosts:
+      - host: "beszel.internal.dtavana.dev"
+        paths:
+          - path: /
+            service:
+              identifier: main
+              port: http
+    tls:
+      - secretName: beszel-tls
+        hosts:
+          - beszel.internal.dtavana.dev
+persistence:
+  data:
+    enabled: true
+    storageClass: "longhorn"
+    accessMode: ReadWriteOnce
+    size: "2Gi"
+    globalMounts:
+      - path: /beszel_data

@@ -3,9 +3,9 @@ kind: Kustomization
 generatorOptions:
   disableNameSuffixHash: true
 resources:
-  - ../../base/portainer
+  - ../../base/beszel
 configMapGenerator:
-  - name: portainer-values
+  - name: beszel-values
     namespace: flux-system
     files:
       - values.yaml=./values.yaml
