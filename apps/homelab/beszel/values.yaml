@@ -10,7 +10,8 @@ controllers:
           TZ: "America/New_York"
   agent:
     type: daemonset
-    hostNetwork: true
+    pod:
+      hostNetwork: true
     containers:
       main:
         image:
