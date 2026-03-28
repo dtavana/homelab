@@ -4,6 +4,7 @@ controllers:
       main:
         image:
           repository: henrygd/beszel
+          # renovate: datasource=docker depName=henrygd/beszel
           tag: latest
         env:
           PORT: 8090
@@ -16,6 +17,7 @@ controllers:
       main:
         image:
           repository: henrygd/beszel-agent
+          # renovate: datasource=docker depName=henrygd/beszel-agent
           tag: latest
         env:
           KEY: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEjWnqu98ZQU+E6z3Pa5h/+hRiF4pWvjUO9410eRBbXw"

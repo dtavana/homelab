@@ -4,6 +4,7 @@ controllers:
       main:
         image:
           repository: emqx/mqttx-web
+          # renovate: datasource=docker depName=emqx/mqttx-web
           tag: latest
 service:
   main:

@@ -13,6 +13,15 @@
   "flux": {
     "fileMatch": ["\\.yaml$"]
   },
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["apps/.*/values\\.yaml$", "infrastructure/.*/values\\.yaml$"],
+      "matchStrings": [
+        "(?x)#\\s*renovate:\\s*datasource=(?<datasource>[a-z-]+)\\s+depName=(?<depName>[^\\s]+)\\n.*?tag:\\s*['\"]?(?<currentValue>[^\\s'\"]+)['\"]?"
+      ]
+    }
+  ],
   "prHourlyLimit": 0,
   "prConcurrentLimit": 0
 }

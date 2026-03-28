@@ -4,6 +4,7 @@ controllers:
       main:
         image:
           repository: ghcr.io/wez/govee2mqtt
+          # renovate: datasource=docker depName=ghcr.io/wez/govee2mqtt
           tag: latest
         env:
           GOVEE_MQTT_HOST: mosquitto.mqtt-broker-system.svc.cluster.local

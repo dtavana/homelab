@@ -5,6 +5,7 @@ controllers:
       main:
         image:
           repository: ghcr.io/home-assistant-libs/python-matter-server
+          # renovate: datasource=docker depName=ghcr.io/home-assistant-libs/python-matter-server
           tag: stable
         resources:
           requests:
