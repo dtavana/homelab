@@ -10,16 +10,13 @@ controllers:
           ENABLE_AUTOPAUSE: "TRUE"
           TYPE: "PAPER"
           MAX_MEMORY: "3G"
+          PLUGINS: "https://github.com/playit-cloud/playit-minecraft-plugin/releases/latest/download/playit-minecraft-plugin.jar"
         resources:
           requests:
             cpu: 1000m
             memory: 2Gi
           limits:
             memory: 4Gi
-      playit:
-        image:
-          repository: playit/playit-agent
-          tag: latest
 service:
   main:
     controller: main
@@ -34,11 +31,5 @@ persistence:
     storageClass: longhorn
     accessMode: ReadWriteOnce
     size: 10Gi
-    advancedMounts:
-      main:
-        main:
-          - path: /data
-            subPath: data
-        playit:
-          - path: /etc/playit
-            subPath: playit_config
+    globalMounts:
+      - path: /data
