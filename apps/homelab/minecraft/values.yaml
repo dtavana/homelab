@@ -1,0 +1,44 @@
+controllers:
+  main:
+    containers:
+      main:
+        image:
+          repository: ghcr.io/itzg/minecraft-server
+          tag: latest
+        env:
+          EULA: "TRUE"
+          ENABLE_AUTOPAUSE: "TRUE"
+          TYPE: "PAPER"
+          MAX_MEMORY: "3G"
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 2Gi
+          limits:
+            memory: 4Gi
+      playit:
+        image:
+          repository: playit/playit-agent
+          tag: latest
+service:
+  main:
+    controller: main
+    type: ClusterIP
+    ports:
+      minecraft:
+        port: 25565
+        protocol: TCP
+persistence:
+  data:
+    enabled: true
+    storageClass: longhorn
+    accessMode: ReadWriteOnce
+    size: 10Gi
+    advancedMounts:
+      main:
+        main:
+          - path: /data
+            subPath: data
+        playit:
+          - path: /etc/playit
+            subPath: playit_config

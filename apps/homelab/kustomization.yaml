@@ -9,3 +9,4 @@ resources:
   - ./zigbee2mqtt
   - ./headlamp
   - ./beszel
+  - ./minecraft
