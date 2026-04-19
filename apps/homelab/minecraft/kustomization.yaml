@@ -4,6 +4,7 @@ generatorOptions:
   disableNameSuffixHash: true
 resources:
   - ../../base/minecraft
+  - ./minecraft-playit-secret.sops.yaml
 configMapGenerator:
   - name: minecraft-values
     namespace: flux-system
