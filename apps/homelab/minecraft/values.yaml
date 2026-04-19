@@ -20,9 +20,11 @@ controllers:
         image:
           repository: ghcr.io/playit-cloud/playit-agent
           tag: latest
-        envFrom:
-          - secretRef:
+        env:
+          SECRET_KEY:
+            secretKeyRef:
               name: playit-secret
+              key: SECRET_KEY
 service:
   main:
     controller: main
