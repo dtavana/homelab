@@ -10,6 +10,7 @@ controllers:
           ENABLE_AUTOPAUSE: "TRUE"
           TYPE: "PAPER"
           MAX_MEMORY: "3G"
+          VERSION: "LATEST"
         resources:
           requests:
             cpu: 1000m
