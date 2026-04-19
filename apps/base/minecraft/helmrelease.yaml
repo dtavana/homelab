@@ -13,11 +13,13 @@ spec:
         kind: HelmRepository
         name: bjw-s-repo
         namespace: flux-system
-  targetNamespace: default
+  targetNamespace: minecraft-system
   install:
+    crds: Create
     remediation:
       retries: 3
   upgrade:
+    crds: CreateReplace
     remediation:
       retries: 3
   valuesFrom:
