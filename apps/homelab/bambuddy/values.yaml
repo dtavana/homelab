@@ -27,23 +27,18 @@ service:
 ingress:
   main:
     enabled: true
-    className: "nginx-internal"
+    className: "nginx"
     annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-production
       nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
       nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
       nginx.ingress.kubernetes.io/proxy-buffering: "off"
     hosts:
-      - host: "bambuddy.internal.dtavana.dev"
+      - host: "bambuddy.dtavana.dev"
         paths:
           - path: /
             service:
               identifier: main
               port: http
-    tls:
-      - secretName: bambuddy-tls
-        hosts:
-          - bambuddy.internal.dtavana.dev
 persistence:
   data:
     enabled: true

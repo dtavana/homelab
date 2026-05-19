@@ -8,4 +8,6 @@ tunnelConfig:
 ingress:
   - hostname: hass.dtavana.dev
     service: http://nginx-system-nginx-ingress-nginx-controller.nginx-system.svc.cluster.local
+  - hostname: bambuddy.dtavana.dev
+    service: http://nginx-system-nginx-ingress-nginx-controller.nginx-system.svc.cluster.local
   - service: http_status:404
