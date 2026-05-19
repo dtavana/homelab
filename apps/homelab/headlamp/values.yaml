@@ -1,7 +1,9 @@
 config:
   # Keep the browser session valid for one year after signing in with the
-  # existing service account token. The chart default is 24 hours.
-  sessionTTL: "31536000"
+  # existing service account token. Passing this through extraArgs avoids
+  # valuesFrom rendering the max integer as scientific notation.
+  extraArgs:
+    - "-session-ttl=31536000"
 ingress:
   enabled: true
   ingressClassName: "nginx-internal"
