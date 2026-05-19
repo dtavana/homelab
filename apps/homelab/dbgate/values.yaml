@@ -1,0 +1,50 @@
+controllers:
+  main:
+    containers:
+      main:
+        image:
+          repository: dbgate/dbgate
+          # renovate: datasource=docker depName=dbgate/dbgate
+          tag: latest
+        env:
+          CONNECTIONS: homelab
+          LABEL_homelab: Homelab Postgres
+          SERVER_homelab: homelab-postgres-rw.postgres-system.svc.cluster.local
+          PORT_homelab: "5432"
+          DATABASE_homelab: app
+          USER_homelab: app
+          PASSWORD_MODE_homelab: askPassword
+          ENGINE_homelab: postgres@dbgate-plugin-postgres
+          SKIP_ALL_AUTH: "1"
+          TZ: "America/New_York"
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+          limits:
+            memory: 512Mi
+service:
+  main:
+    controller: main
+    ports:
+      http:
+        port: 3000
+ingress:
+  main:
+    enabled: true
+    className: "nginx-internal"
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-production
+      nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+      nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    hosts:
+      - host: "dbgate.internal.dtavana.dev"
+        paths:
+          - path: /
+            service:
+              identifier: main
+              port: http
+    tls:
+      - secretName: dbgate-tls
+        hosts:
+          - dbgate.internal.dtavana.dev
