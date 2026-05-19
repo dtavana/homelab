@@ -2,7 +2,6 @@ config:
   # Keep the browser session valid for one year after signing in with the
   # existing service account token. The chart default is 24 hours.
   sessionTTL: 31536000
-
 ingress:
   enabled: true
   ingressClassName: "nginx-internal"
