@@ -10,3 +10,4 @@ resources:
   - jetstack-helmrepo.yaml
   - mqtt-broker-helmrepo.yaml
   - app-template-helmrepo.yaml
+  - cloudnative-pg-helmrepo.yaml
