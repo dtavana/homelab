@@ -12,3 +12,4 @@ resources:
   - ./minecraft
   - ./bambuddy
   - ./postgres
+  - ./adminer
