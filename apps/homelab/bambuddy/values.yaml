@@ -1,0 +1,65 @@
+controllers:
+  main:
+    pod:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+    containers:
+      main:
+        image:
+          repository: ghcr.io/maziggy/bambuddy
+          # renovate: datasource=docker depName=ghcr.io/maziggy/bambuddy
+          tag: latest
+        env:
+          TZ: "America/New_York"
+          PORT: "8000"
+          PUID: "1000"
+          PGID: "1000"
+        securityContext:
+          capabilities:
+            add:
+              - NET_BIND_SERVICE
+service:
+  main:
+    controller: main
+    ports:
+      http:
+        port: 8000
+ingress:
+  main:
+    enabled: true
+    className: "nginx-internal"
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-production
+      nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+      nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+      nginx.ingress.kubernetes.io/proxy-buffering: "off"
+    hosts:
+      - host: "bambuddy.internal.dtavana.dev"
+        paths:
+          - path: /
+            service:
+              identifier: main
+              port: http
+    tls:
+      - secretName: bambuddy-tls
+        hosts:
+          - bambuddy.internal.dtavana.dev
+persistence:
+  data:
+    enabled: true
+    storageClass: "longhorn"
+    accessMode: ReadWriteOnce
+    size: "10Gi"
+    advancedMounts:
+      main:
+        main:
+          - path: /app/data
+  logs:
+    enabled: true
+    storageClass: "longhorn"
+    accessMode: ReadWriteOnce
+    size: "2Gi"
+    advancedMounts:
+      main:
+        main:
+          - path: /app/logs
