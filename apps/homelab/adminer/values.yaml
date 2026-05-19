@@ -1,0 +1,43 @@
+controllers:
+  main:
+    containers:
+      main:
+        image:
+          repository: adminer
+          # renovate: datasource=docker depName=adminer
+          tag: latest
+        env:
+          ADMINER_DEFAULT_SERVER: homelab-postgres-rw.postgres-system.svc.cluster.local
+          ADMINER_DESIGN: dracula
+          TZ: "America/New_York"
+        resources:
+          requests:
+            cpu: 25m
+            memory: 64Mi
+          limits:
+            memory: 256Mi
+service:
+  main:
+    controller: main
+    ports:
+      http:
+        port: 8080
+ingress:
+  main:
+    enabled: true
+    className: "nginx-internal"
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-production
+      nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+      nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    hosts:
+      - host: "adminer.internal.dtavana.dev"
+        paths:
+          - path: /
+            service:
+              identifier: main
+              port: http
+    tls:
+      - secretName: adminer-tls
+        hosts:
+          - adminer.internal.dtavana.dev
