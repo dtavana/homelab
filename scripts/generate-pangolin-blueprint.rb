@@ -150,6 +150,12 @@ blueprint = {
 blueprint_yaml = blueprint.to_yaml(line_width: -1).sub(/\A---\n/, "")
 
 values = {
+  "global" => {
+    "podSecurityContext" => {
+      "fsGroup" => 65_534,
+      "fsGroupChangePolicy" => "OnRootMismatch"
+    }
+  },
   "newtInstances" => [
     {
       "name" => "main-tunnel",
