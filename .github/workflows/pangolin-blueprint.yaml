@@ -1,0 +1,64 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Pangolin Blueprint
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'apps/**/*.yaml'
+      - 'apps/**/*.yml'
+      - 'infrastructure/**/*.yaml'
+      - 'infrastructure/**/*.yml'
+      - 'scripts/generate-pangolin-blueprint.rb'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'apps/**/*.yaml'
+      - 'apps/**/*.yml'
+      - 'infrastructure/**/*.yaml'
+      - 'infrastructure/**/*.yml'
+      - 'scripts/generate-pangolin-blueprint.rb'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  generate:
+    name: Generate Blueprint Values
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Generate Pangolin blueprint values
+        run: |
+          ruby scripts/generate-pangolin-blueprint.rb
+      - name: Check generated output
+        id: git-check
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "changes=true" >> "${GITHUB_OUTPUT}"
+          else
+            echo "changes=false" >> "${GITHUB_OUTPUT}"
+          fi
+      - name: Show generated diff
+        if: steps.git-check.outputs.changes == 'true'
+        run: |
+          git diff -- infrastructure/homelab/pangolin/values.yaml
+      - name: Fail stale pull request
+        if: github.event_name == 'pull_request' && steps.git-check.outputs.changes == 'true'
+        run: |
+          echo "Pangolin blueprint values are stale. Run scripts/generate-pangolin-blueprint.rb and commit the result."
+          exit 1
+      - name: Commit generated values
+        if: github.event_name == 'push' && steps.git-check.outputs.changes == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: regenerate Pangolin blueprint values"
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "github-actions[bot]@users.noreply.github.com"
+          commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
