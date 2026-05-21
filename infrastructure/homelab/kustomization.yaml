@@ -4,6 +4,7 @@ resources:
   - ../base/helm-sources
   - ./cert-manager
   - ./nginx
+  - ./pangolin
   - ./cloudflared
   - ./discord-alerts
   - ./longhorn
