@@ -10,3 +10,4 @@ resources:
   - ./longhorn
   - ./cloudnative-pg
   - ./mqtt-broker
+  - ./monitoring
