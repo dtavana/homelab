@@ -8,10 +8,12 @@ require "yaml"
 ROOT = File.expand_path("..", __dir__)
 DEFAULT_TARGET = "nginx-system-nginx-ingress-nginx-controller.nginx-system.svc.cluster.local"
 DEFAULT_VALUES_OUTPUT = File.join(ROOT, "infrastructure", "homelab", "pangolin", "values.yaml")
+DEFAULT_PRIVATE_RESOURCES_FILE = File.join(ROOT, "infrastructure", "homelab", "pangolin", "private-resources.yaml")
 PUBLIC_CLASS = "nginx"
 
 options = {
   values_output: DEFAULT_VALUES_OUTPUT,
+  private_resources_file: DEFAULT_PRIVATE_RESOURCES_FILE,
   target: DEFAULT_TARGET,
   port: 80,
   method: "http",
@@ -23,6 +25,9 @@ options = {
 OptionParser.new do |opts|
   opts.banner = "Usage: scripts/generate-pangolin-blueprint.rb [options]"
   opts.on("--values-output PATH", "Write Newt Helm values to PATH") { |value| options[:values_output] = value }
+  opts.on("--private-resources-file PATH", "Load private Pangolin resources from PATH") do |value|
+    options[:private_resources_file] = value
+  end
   opts.on("--target HOST", "Pangolin target hostname") { |value| options[:target] = value }
   opts.on("--port PORT", Integer, "Pangolin target port") { |value| options[:port] = value }
   opts.on("--method METHOD", "Pangolin target method") { |value| options[:method] = value }
@@ -100,11 +105,28 @@ def deep_stringify(value)
   end
 end
 
+def load_private_resources(path)
+  return {} unless File.exist?(path)
+
+  config = YAML.safe_load(File.read(path), aliases: true) || {}
+  unless config.is_a?(Hash)
+    raise "#{path} must contain a YAML mapping"
+  end
+
+  resources = config.fetch("private-resources", {})
+  unless resources.is_a?(Hash)
+    raise "#{path} private-resources must be a YAML mapping"
+  end
+
+  resources
+end
+
 hosts = []
 
 Dir[File.join(ROOT, "{apps,infrastructure}", "homelab", "**", "*.yaml")].sort.each do |path|
   next if path.end_with?(".sops.yaml")
   next if path == options[:values_output]
+  next if path == options[:private_resources_file]
 
   YAML.load_stream(File.read(path)) do |doc|
     collect_hosts_from_ingress(doc, hosts)
@@ -114,6 +136,7 @@ end
 
 excluded = options[:exclude_hosts].map { |host| normalize_host(host) }
 no_auth = options[:no_auth_hosts].map { |host| normalize_host(host) }
+private_resources = load_private_resources(options[:private_resources_file])
 
 hosts = hosts
   .map { |host| normalize_host(host) }
@@ -146,6 +169,7 @@ blueprint = {
     ]
   end
 }
+blueprint["private-resources"] = private_resources unless private_resources.empty?
 
 blueprint_yaml = blueprint.to_yaml(line_width: -1).sub(/\A---\n/, "")
 
@@ -163,7 +187,7 @@ values = {
       "auth" => {
         "existingSecretName" => "newt-main-tunnel-auth"
       },
-      "acceptClients" => false,
+      "acceptClients" => true,
       "configPersistence" => {
         "enabled" => true,
         "mountPath" => "/var/lib/newt",

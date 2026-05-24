@@ -1,0 +1,9 @@
+private-resources:
+  bambu-p2s:
+    name: Bambu P2S
+    mode: host
+    destination: 192.168.0.124
+    alias: bambu-p2s.internal.dtavana.dev
+    disable-icmp: false
+    roles:
+      - Member
