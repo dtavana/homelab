@@ -8,7 +8,7 @@ newtInstances:
     enabled: true
     auth:
       existingSecretName: newt-main-tunnel-auth
-    acceptClients: true
+    acceptClients: false
     configPersistence:
       enabled: true
       mountPath: "/var/lib/newt"
@@ -38,12 +38,3 @@ newtInstances:
           - hostname: nginx-system-nginx-ingress-nginx-controller.nginx-system.svc.cluster.local
             port: 80
             method: http
-      private-resources:
-        bambu-p2s:
-          name: Bambu P2S
-          mode: host
-          destination: 192.168.0.124
-          alias: bambu-p2s.internal.dtavana.dev
-          disable-icmp: false
-          roles:
-          - Member
