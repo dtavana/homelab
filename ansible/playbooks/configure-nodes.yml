@@ -1,5 +1,6 @@
 - name: 01 - Configure Base OS for Kubernetes Nodes
   hosts: k3s_cluster
+  become: true
   gather_facts: true
   tasks:
     - name: Set hostname from inventory
@@ -21,8 +22,33 @@
           - curl
           - nano
           - open-iscsi
+          - nfs-common
         state: present
         update_cache: yes
+    - name: Ensure multipath configuration directory exists
+      ansible.builtin.file:
+        path: /etc/multipath/conf.d
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+    - name: Blacklist Longhorn virtual disks from multipath
+      ansible.builtin.copy:
+        dest: /etc/multipath/conf.d/longhorn.conf
+        owner: root
+        group: root
+        mode: "0644"
+        content: |
+          blacklist {
+              devnode "^sd[a-z0-9]+"
+          }
+    - name: Disable multipathd to prevent Longhorn volume interference
+      ansible.builtin.systemd:
+        name: multipathd
+        state: stopped
+        enabled: false
+        masked: true
+      failed_when: false
     - name: Create 'longhorn-lv' with a fixed size
       community.general.lvol:
         vg: ubuntu-vg
