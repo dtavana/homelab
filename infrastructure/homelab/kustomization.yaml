@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - ../base/helm-sources
   - ./cert-manager
+  - ./coredns
   - ./nginx
   - ./pangolin
   - ./discord-alerts
