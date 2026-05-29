@@ -6,3 +6,11 @@ public-resources:
     targets:
       - hostname: minecraft-system-minecraft.minecraft-system.svc.cluster.local
         port: 25565
+private-resources:
+  bambuddy-virtual-printer:
+    name: Bambuddy Virtual Printer
+    mode: host
+    destination: bambuddy-system-bambuddy.bambuddy-system.svc.cluster.local
+    alias: bambuddy-vp.dtavana.internal
+    tcp-ports: "3000,3002,8883,6000,990,322,50000-50100"
+    udp-ports: "2021"

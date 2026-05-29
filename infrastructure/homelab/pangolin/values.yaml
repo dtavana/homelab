@@ -4,7 +4,7 @@ global:
     fsGroup: 65534
     fsGroupChangePolicy: OnRootMismatch
   podAnnotations:
-    checksum/pangolin-blueprint: "ba6ec02923280394e6af86637874809636df30a4e46aa8623ff98430ae8c8c8f"
+    checksum/pangolin-blueprint: "7dd8ebefd96f6b02d9f779222d9fb25b28993008d13b858fbfc0e5f0184193f5"
 newtInstances:
   - name: main-tunnel
     enabled: true
@@ -47,3 +47,11 @@ newtInstances:
           targets:
           - hostname: minecraft-system-minecraft.minecraft-system.svc.cluster.local
             port: 25565
+      private-resources:
+        bambuddy-virtual-printer:
+          name: Bambuddy Virtual Printer
+          mode: host
+          destination: bambuddy-system-bambuddy.bambuddy-system.svc.cluster.local
+          alias: bambuddy-vp.dtavana.internal
+          tcp-ports: 3000,3002,8883,6000,990,322,50000-50100
+          udp-ports: '2021'
