@@ -3,6 +3,8 @@ global:
   podSecurityContext:
     fsGroup: 65534
     fsGroupChangePolicy: OnRootMismatch
+  podAnnotations:
+    checksum/pangolin-blueprint: "ba6ec02923280394e6af86637874809636df30a4e46aa8623ff98430ae8c8c8f"
 newtInstances:
   - name: main-tunnel
     enabled: true

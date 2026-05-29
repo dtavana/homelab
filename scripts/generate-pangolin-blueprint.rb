@@ -3,6 +3,7 @@
 
 require "fileutils"
 require "optparse"
+require "digest"
 require "yaml"
 
 ROOT = File.expand_path("..", __dir__)
@@ -172,6 +173,7 @@ blueprint = {
 merge_blueprint!(blueprint, load_blueprint_file(options[:blueprint_input]), options[:blueprint_input])
 
 blueprint_yaml = blueprint.to_yaml(line_width: -1).sub(/\A---\n/, "").chomp
+blueprint_checksum = Digest::SHA256.hexdigest(blueprint_yaml)
 blueprint_block = blueprint_yaml.lines.map { |line| "      #{line}" }.join
 
 values_file = <<~YAML
@@ -180,6 +182,8 @@ values_file = <<~YAML
     podSecurityContext:
       fsGroup: 65534
       fsGroupChangePolicy: OnRootMismatch
+    podAnnotations:
+      checksum/pangolin-blueprint: "#{blueprint_checksum}"
   newtInstances:
     - name: main-tunnel
       enabled: true
