@@ -1,6 +1,20 @@
 defaultSettings:
   defaultDataPath: "/var/lib/longhorn/"
+  defaultDataLocality: "disabled"
+  defaultReplicaCount: '{"v1":"3","v2":"3"}'
+  replicaSoftAntiAffinity: false
+  replicaAutoBalance: "disabled"
+  storageMinimalAvailablePercentage: 25
+  storageReservedPercentageForDefaultDisk: 30
   concurrentAutomaticEngineUpgradePerNodeLimit: 1
+persistence:
+  defaultClass: true
+  defaultClassReplicaCount: 3
+  defaultDataLocality: "disabled"
+  dataEngine: "v1"
+  disableRevisionCounter: "true"
+  reclaimPolicy: "Delete"
+  volumeBindingMode: "Immediate"
 defaultBackupStore:
   backupTarget: "s3://dtavana-longhorn-backups@us-east1/"
   backupTargetCredentialSecret: "longhorn-backup-secret"
