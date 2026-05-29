@@ -1,4 +1,35 @@
 controller:
+  replicaCount: 2
+  minAvailable: 1
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                    - ingress-nginx
+                - key: app.kubernetes.io/instance
+                  operator: In
+                  values:
+                    - nginx-system-nginx-internal
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                    - controller
+            topologyKey: kubernetes.io/hostname
+  topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: kubernetes.io/hostname
+      whenUnsatisfiable: ScheduleAnyway
+      labelSelector:
+        matchLabels:
+          app.kubernetes.io/name: ingress-nginx
+          app.kubernetes.io/instance: nginx-system-nginx-internal
+          app.kubernetes.io/component: controller
   ingressClassResource:
     name: nginx-internal
     enabled: true
