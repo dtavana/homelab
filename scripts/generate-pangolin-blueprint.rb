@@ -8,10 +8,12 @@ require "yaml"
 ROOT = File.expand_path("..", __dir__)
 DEFAULT_TARGET = "nginx-system-nginx-ingress-nginx-controller.nginx-system.svc.cluster.local"
 DEFAULT_VALUES_OUTPUT = File.join(ROOT, "infrastructure", "homelab", "pangolin", "values.yaml")
+DEFAULT_BLUEPRINT_INPUT = File.join(ROOT, "infrastructure", "homelab", "pangolin", "blueprint.yaml")
 PUBLIC_CLASS = "nginx"
 
 options = {
   values_output: DEFAULT_VALUES_OUTPUT,
+  blueprint_input: DEFAULT_BLUEPRINT_INPUT,
   target: DEFAULT_TARGET,
   port: 80,
   method: "http",
@@ -23,6 +25,7 @@ options = {
 OptionParser.new do |opts|
   opts.banner = "Usage: scripts/generate-pangolin-blueprint.rb [options]"
   opts.on("--values-output PATH", "Write Newt Helm values to PATH") { |value| options[:values_output] = value }
+  opts.on("--blueprint-input PATH", "Merge explicit blueprint resources from PATH") { |value| options[:blueprint_input] = value }
   opts.on("--target HOST", "Pangolin target hostname") { |value| options[:target] = value }
   opts.on("--port PORT", Integer, "Pangolin target port") { |value| options[:port] = value }
   opts.on("--method METHOD", "Pangolin target method") { |value| options[:method] = value }
@@ -89,6 +92,36 @@ def display_name(host)
   host.split(".").first.split("-").map(&:capitalize).join(" ")
 end
 
+def merge_blueprint!(blueprint, additions, source)
+  return blueprint if additions.nil?
+  raise "#{source} must contain a YAML mapping" unless additions.is_a?(Hash)
+
+  additions.each do |section, resources|
+    next if resources.nil?
+    raise "#{source}: #{section} must contain a YAML mapping" unless resources.is_a?(Hash)
+
+    blueprint[section] ||= {}
+    duplicates = blueprint[section].keys & resources.keys
+    unless duplicates.empty?
+      raise "#{source}: duplicate #{section} keys: #{duplicates.join(", ")}"
+    end
+
+    blueprint[section].merge!(resources)
+  end
+
+  blueprint
+end
+
+def load_blueprint_file(path)
+  return {} unless File.exist?(path)
+
+  merged = {}
+  YAML.load_stream(File.read(path)) do |doc|
+    merge_blueprint!(merged, doc, path)
+  end
+  merged
+end
+
 hosts = []
 
 Dir[File.join(ROOT, "{apps,infrastructure}", "homelab", "**", "*.yaml")].sort.each do |path|
@@ -135,6 +168,8 @@ blueprint = {
     ]
   end
 }
+
+merge_blueprint!(blueprint, load_blueprint_file(options[:blueprint_input]), options[:blueprint_input])
 
 blueprint_yaml = blueprint.to_yaml(line_width: -1).sub(/\A---\n/, "").chomp
 blueprint_block = blueprint_yaml.lines.map { |line| "      #{line}" }.join

@@ -38,3 +38,10 @@ newtInstances:
           - hostname: nginx-system-nginx-ingress-nginx-controller.nginx-system.svc.cluster.local
             port: 80
             method: http
+        minecraft:
+          name: Minecraft
+          protocol: tcp
+          proxy-port: 25565
+          targets:
+          - hostname: minecraft-system-minecraft.minecraft-system.svc.cluster.local
+            port: 25565
