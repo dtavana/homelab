@@ -1,22 +1,46 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base"
+    "config:recommended"
   ],
   "dependencyDashboard": true,
+  "automergeType": "pr",
+  "platformAutomerge": false,
+  "ignoreTests": false,
   "packageRules": [
     {
       "matchDatasources": ["helm"],
       "separateMinorPatch": true
+    },
+    {
+      "description": "Automerge low-risk container image updates after CI passes.",
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["digest", "patch"],
+      "automerge": true,
+      "labels": ["renovate", "automerge"]
+    },
+    {
+      "description": "Automerge patch-level Helm chart updates after CI passes.",
+      "matchDatasources": ["helm"],
+      "matchUpdateTypes": ["patch"],
+      "automerge": true,
+      "labels": ["renovate", "helm", "automerge"]
+    },
+    {
+      "description": "Require manual approval for higher-risk Helm chart changes.",
+      "matchDatasources": ["helm"],
+      "matchUpdateTypes": ["minor", "major"],
+      "dependencyDashboardApproval": true,
+      "labels": ["renovate", "helm", "manual-approval"]
     }
   ],
   "flux": {
-    "fileMatch": ["\\.yaml$"]
+    "managerFilePatterns": ["/\\.yaml$/"]
   },
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": ["apps/.*/values\\.yaml$", "infrastructure/.*/values\\.yaml$"],
+      "managerFilePatterns": ["/apps/.*/values\\.yaml$/", "/infrastructure/.*/values\\.yaml$/"],
       "matchStrings": [
         "(?x)#\\s*renovate:\\s*datasource=(?<datasource>[a-z-]+)\\s+depName=(?<depName>[^\\s]+)\\n.*?tag:\\s*['\"]?(?<currentValue>[^\\s'\"]+)['\"]?"
       ]

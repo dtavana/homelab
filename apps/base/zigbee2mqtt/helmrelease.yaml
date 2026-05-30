@@ -22,6 +22,7 @@ spec:
     crds: CreateReplace
     remediation:
       retries: 3
+      strategy: rollback
   valuesFrom:
     - kind: ConfigMap
       name: zigbee2mqtt-values

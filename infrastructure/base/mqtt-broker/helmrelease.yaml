@@ -16,8 +16,13 @@ spec:
   targetNamespace: mqtt-broker-system
   install:
     crds: Create
+    remediation:
+      retries: 3
   upgrade:
     crds: CreateReplace
+    remediation:
+      retries: 3
+      strategy: rollback
   valuesFrom:
     - kind: ConfigMap
       name: mqtt-broker-values
