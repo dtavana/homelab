@@ -13,20 +13,31 @@ concurrency:
 permissions:
   contents: read
 jobs:
-  yamllint:
-    name: YAML Lint
+  pre-commit:
+    name: Pre-Commit
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Install yamllint
-        shell: bash
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: stable
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ruby
+      - name: Install dependencies
         run: |
-          pip install --user yamllint
-      - name: Run yamllint
-        shell: bash
+          pip install pre-commit yamllint
+          go install github.com/google/yamlfmt/cmd/yamlfmt@v0.21.0
+      - name: Run pre-commit
         run: |
-          yamllint --config-file .yamllint.yaml --format github .
+          pre-commit run --all-files --show-diff-on-failure
   actionlint:
     name: GitHub Actions Lint
     runs-on: ubuntu-latest
