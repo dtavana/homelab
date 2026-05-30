@@ -4,7 +4,7 @@ global:
     fsGroup: 65534
     fsGroupChangePolicy: OnRootMismatch
   podAnnotations:
-    checksum/pangolin-blueprint: "7dd8ebefd96f6b02d9f779222d9fb25b28993008d13b858fbfc0e5f0184193f5"
+    checksum/pangolin-blueprint: "2c9626d846836135aa98857bdcc404cc3b773754d17a2095440cf80f37b1ccf2"
 newtInstances:
   - name: main-tunnel
     enabled: true
@@ -36,6 +36,16 @@ newtInstances:
           full-domain: hass.dtavana.dev
           auth:
             sso-enabled: false
+          targets:
+          - hostname: nginx-system-nginx-ingress-nginx-controller.nginx-system.svc.cluster.local
+            port: 80
+            method: http
+        homepage-dtavana-dev:
+          name: Homepage
+          protocol: http
+          full-domain: homepage.dtavana.dev
+          auth:
+            sso-enabled: true
           targets:
           - hostname: nginx-system-nginx-ingress-nginx-controller.nginx-system.svc.cluster.local
             port: 80

@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: homepage
+  namespace: homepage-system
+  labels:
+    app.kubernetes.io/name: homepage
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: homepage.dtavana.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: homepage
+                port:
+                  name: http
