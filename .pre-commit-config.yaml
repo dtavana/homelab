@@ -7,17 +7,14 @@ repos:
         language: system
         pass_filenames: false
         files: ^(apps|infrastructure)/homelab/.*\.ya?ml$|^scripts/generate-pangolin-blueprint\.rb$
-
       - id: yamlfmt
         name: Format YAML
         entry: yamlfmt -conf .yamlfmt.yaml
         language: system
         types_or: [yaml]
-
       - id: yamllint
         name: Lint YAML
         entry: yamllint --config-file .yamllint.yaml
         language: system
         types_or: [yaml]
-
 exclude: ^tools/
