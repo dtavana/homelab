@@ -13,3 +13,4 @@ resources:
   - ./bambuddy
   - ./postgres
   - ./dbgate
+  - ./homepage

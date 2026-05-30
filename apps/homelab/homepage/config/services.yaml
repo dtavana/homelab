@@ -1,0 +1,73 @@
+- Home:
+    - Home Assistant:
+        icon: home-assistant.png
+        href: https://hass.dtavana.dev
+        description: Home automation hub
+        namespace: hass-system
+        app: home-assistant
+    - Pi-hole:
+        icon: pi-hole.png
+        href: https://pihole.internal.dtavana.dev
+        description: DNS and ad blocking
+        namespace: pihole-system
+        app: pihole
+    - Minecraft:
+        icon: minecraft.png
+        description: Game server
+        namespace: minecraft-system
+        app: minecraft
+- Cluster:
+    - Headlamp:
+        icon: kubernetes-dashboard.png
+        href: https://headlamp.internal.dtavana.dev
+        description: Kubernetes dashboard
+        namespace: headlamp-system
+        app: headlamp
+    - Longhorn:
+        icon: longhorn.png
+        href: https://longhorn.internal.dtavana.dev
+        description: Cluster storage
+        namespace: longhorn-system
+        podSelector: ""
+    - Pangolin:
+        icon: pangolin.png
+        href: https://pangolin.dtavana.dev
+        description: Secure public access
+        namespace: pangolin-system
+        app: pangolin
+- Data:
+    - DBGate:
+        icon: dbgate.png
+        href: https://dbgate.internal.dtavana.dev
+        description: Database client
+        namespace: dbgate-system
+        app: dbgate
+    - Adminer:
+        icon: adminer.png
+        href: https://adminer.internal.dtavana.dev
+        description: Database admin
+        namespace: adminer-system
+        app: adminer
+    - PostgreSQL:
+        icon: postgres.png
+        description: CloudNativePG cluster
+        namespace: postgres-system
+        app: postgres
+- Devices:
+    - Beszel:
+        icon: beszel.png
+        href: https://beszel.internal.dtavana.dev
+        description: System monitoring
+        namespace: beszel-system
+        app: beszel
+    - Zigbee2MQTT:
+        icon: zigbee2mqtt.png
+        href: https://zigbee2mqtt.internal.dtavana.dev
+        description: Zigbee bridge
+        namespace: mqtt-system
+        app: zigbee2mqtt
+    - Matter Server:
+        icon: home-assistant-matter.png
+        description: Matter bridge
+        namespace: matter-server-system
+        app: matter-server
