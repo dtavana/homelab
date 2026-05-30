@@ -1,0 +1,112 @@
+homepage:
+  public_host: homepage.dtavana.dev
+  internal_host: homepage.internal.dtavana.dev
+  exclude_hosts:
+    - pangolin.dtavana.dev
+
+settings:
+  theme: dark
+  color: slate
+  headerStyle: boxed
+  layout:
+    Home:
+      style: row
+      columns: 3
+    Cluster:
+      style: row
+      columns: 3
+    Data:
+      style: row
+      columns: 3
+    Devices:
+      style: row
+      columns: 3
+    Public:
+      style: row
+      columns: 3
+    Internal:
+      style: row
+      columns: 3
+
+common_bookmarks:
+  Daily:
+    - GitHub:
+        - icon: github-light.png
+          href: https://github.com/
+    - Homepage Docs:
+        - icon: homepage.png
+          href: https://gethomepage.dev/
+
+overrides:
+  hass.dtavana.dev:
+    name: Home Assistant
+    icon: home-assistant.png
+    description: Home automation hub
+    group: Home
+    namespace: hass-system
+    app: home-assistant
+    visibility: public
+  bambuddy.dtavana.dev:
+    name: Bambuddy
+    icon: mdi-printer-3d
+    description: Bambu printer tools
+    group: Devices
+    namespace: bambuddy-system
+    app: bambuddy
+    visibility: public
+  pihole.internal.dtavana.dev:
+    name: Pi-hole
+    icon: pi-hole.png
+    description: DNS and ad blocking
+    group: Home
+    namespace: pihole-system
+    app: pihole
+    visibility: internal
+  headlamp.internal.dtavana.dev:
+    name: Headlamp
+    icon: kubernetes-dashboard.png
+    description: Kubernetes dashboard
+    group: Cluster
+    namespace: headlamp-system
+    app: headlamp
+    visibility: internal
+  longhorn.internal.dtavana.dev:
+    name: Longhorn
+    icon: longhorn.png
+    description: Cluster storage
+    group: Cluster
+    namespace: longhorn-system
+    podSelector: ""
+    visibility: internal
+  dbgate.internal.dtavana.dev:
+    name: DBGate
+    icon: dbgate.png
+    description: Database client
+    group: Data
+    namespace: dbgate-system
+    app: dbgate
+    visibility: internal
+  adminer.internal.dtavana.dev:
+    name: Adminer
+    icon: adminer.png
+    description: Database admin
+    group: Data
+    namespace: adminer-system
+    app: adminer
+    visibility: internal
+  beszel.internal.dtavana.dev:
+    name: Beszel
+    icon: beszel.png
+    description: System monitoring
+    group: Devices
+    namespace: beszel-system
+    app: beszel
+    visibility: internal
+  zigbee2mqtt.internal.dtavana.dev:
+    name: Zigbee2MQTT
+    icon: zigbee2mqtt.png
+    description: Zigbee bridge
+    group: Devices
+    namespace: hass-system
+    app: zigbee2mqtt
+    visibility: internal

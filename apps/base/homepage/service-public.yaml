@@ -1,10 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: homepage
+  name: homepage-public
   namespace: homepage-system
   labels:
     app.kubernetes.io/name: homepage
+    app.kubernetes.io/instance: public
 spec:
   type: ClusterIP
   ports:
@@ -14,3 +15,4 @@ spec:
       protocol: TCP
   selector:
     app.kubernetes.io/name: homepage
+    app.kubernetes.io/instance: public

@@ -1,20 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: homepage
+  name: homepage-public
   namespace: homepage-system
   labels:
     app.kubernetes.io/name: homepage
+    app.kubernetes.io/instance: public
 spec:
   revisionHistoryLimit: 3
   replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: homepage
+      app.kubernetes.io/instance: public
   template:
     metadata:
       labels:
         app.kubernetes.io/name: homepage
+        app.kubernetes.io/instance: public
     spec:
       serviceAccountName: homepage
       automountServiceAccountToken: true
@@ -93,6 +96,6 @@ spec:
       volumes:
         - name: homepage-config
           configMap:
-            name: homepage-config
+            name: homepage-public-config
         - name: logs
           emptyDir: {}

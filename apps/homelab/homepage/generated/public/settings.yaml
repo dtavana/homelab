@@ -1,4 +1,3 @@
-title: Homelab
 theme: dark
 color: slate
 headerStyle: boxed
@@ -15,8 +14,16 @@ layout:
   Devices:
     style: row
     columns: 3
+  Public:
+    style: row
+    columns: 3
+  Internal:
+    style: row
+    columns: 3
+title: Homelab
+instanceName: public
+hideVersion: true
 quicklaunch:
   searchDescriptions: true
   hideInternetSearch: false
   showSearchSuggestions: true
-hideVersion: true

@@ -1,0 +1,73 @@
+- Cluster:
+  - Headlamp:
+      icon: kubernetes-dashboard.png
+      href: https://headlamp.internal.dtavana.dev
+      description: Kubernetes dashboard
+      namespace: headlamp-system
+      app: headlamp
+  - Longhorn:
+      icon: longhorn.png
+      href: https://longhorn.internal.dtavana.dev
+      description: Cluster storage
+      namespace: longhorn-system
+      podSelector: ''
+- Data:
+  - Adminer:
+      icon: adminer.png
+      href: https://adminer.internal.dtavana.dev
+      description: Database admin
+      namespace: adminer-system
+      app: adminer
+  - DBGate:
+      icon: dbgate.png
+      href: https://dbgate.internal.dtavana.dev
+      description: Database client
+      namespace: dbgate-system
+      app: dbgate
+- Devices:
+  - Bambuddy:
+      icon: mdi-printer-3d
+      href: https://bambuddy.dtavana.dev
+      description: Bambu printer tools
+      namespace: bambuddy-system
+      app: bambuddy
+  - Beszel:
+      icon: beszel.png
+      href: https://beszel.internal.dtavana.dev
+      description: System monitoring
+      namespace: beszel-system
+      app: beszel
+  - Zigbee2MQTT:
+      icon: zigbee2mqtt.png
+      href: https://zigbee2mqtt.internal.dtavana.dev
+      description: Zigbee bridge
+      namespace: hass-system
+      app: zigbee2mqtt
+- Home:
+  - Home Assistant:
+      icon: home-assistant.png
+      href: https://hass.dtavana.dev
+      description: Home automation hub
+      namespace: hass-system
+      app: home-assistant
+  - Pi-hole:
+      icon: pi-hole.png
+      href: https://pihole.internal.dtavana.dev
+      description: DNS and ad blocking
+      namespace: pihole-system
+      app: pihole
+- Internal:
+  - Govee2mqtt:
+      icon: mdi-web
+      href: https://govee2mqtt.internal.dtavana.dev
+      description: nginx-internal ingress
+  - Mqtt:
+      icon: mdi-web
+      href: https://mqtt.internal.dtavana.dev
+      description: nginx-internal ingress
+      namespace: mqtt-broker-system
+      app: mosquitto
+  - Mqttx:
+      icon: mdi-web
+      href: https://mqttx.internal.dtavana.dev
+      description: nginx-internal ingress

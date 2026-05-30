@@ -4,5 +4,7 @@ resources:
   - namespace.yaml
   - serviceaccount.yaml
   - rbac.yaml
-  - deployment.yaml
-  - service.yaml
+  - deployment-public.yaml
+  - deployment-internal.yaml
+  - service-public.yaml
+  - service-internal.yaml
