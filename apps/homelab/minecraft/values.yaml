@@ -10,6 +10,7 @@ controllers:
           ENABLE_AUTOPAUSE: "TRUE"
           TYPE: "PAPER"
           MAX_MEMORY: "3G"
+          MAX_TICK_TIME: "-1"
           VERSION: "LATEST"
         resources:
           requests:
