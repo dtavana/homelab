@@ -22,4 +22,5 @@ spec:
   upgrade:
     remediation:
       retries: 3
+      strategy: rollback
     crds: CreateReplace

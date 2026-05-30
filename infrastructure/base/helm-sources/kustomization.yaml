@@ -11,3 +11,4 @@ resources:
   - mqtt-broker-helmrepo.yaml
   - app-template-helmrepo.yaml
   - cloudnative-pg-helmrepo.yaml
+  - prometheus-community-helmrepo.yaml

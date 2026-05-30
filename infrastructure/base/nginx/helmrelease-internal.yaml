@@ -16,8 +16,13 @@ spec:
   targetNamespace: nginx-system
   install:
     crds: Create
+    remediation:
+      retries: 3
   upgrade:
     crds: CreateReplace
+    remediation:
+      retries: 3
+      strategy: rollback
   valuesFrom:
     - kind: ConfigMap
       name: nginx-internal-values

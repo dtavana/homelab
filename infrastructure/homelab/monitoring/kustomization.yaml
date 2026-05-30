@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+generatorOptions:
+  disableNameSuffixHash: true
+resources:
+  - ../../base/monitoring
+  - dashboard-homelab-overview.yaml
+configMapGenerator:
+  - name: kube-prometheus-stack-values
+    namespace: flux-system
+    files:
+      - values.yaml=./values.yaml

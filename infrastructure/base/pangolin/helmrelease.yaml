@@ -17,3 +17,10 @@ spec:
   valuesFrom:
     - kind: ConfigMap
       name: newt-values
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+      strategy: rollback

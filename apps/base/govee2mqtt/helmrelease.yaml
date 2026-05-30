@@ -20,6 +20,7 @@ spec:
   upgrade:
     remediation:
       retries: 3
+      strategy: rollback
   valuesFrom:
     - kind: ConfigMap
       name: govee2mqtt-values
