@@ -3,7 +3,6 @@ homepage:
   internal_host: homepage.internal.dtavana.dev
   exclude_hosts:
     - pangolin.dtavana.dev
-
 settings:
   theme: dark
   color: slate
@@ -27,7 +26,6 @@ settings:
     Internal:
       style: row
       columns: 3
-
 common_bookmarks:
   Daily:
     - GitHub:
@@ -36,7 +34,6 @@ common_bookmarks:
     - Homepage Docs:
         - icon: homepage.png
           href: https://gethomepage.dev/
-
 overrides:
   hass.dtavana.dev:
     name: Home Assistant

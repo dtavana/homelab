@@ -1,14 +1,14 @@
 - Devices:
-  - Bambuddy:
-      icon: mdi-printer-3d
-      href: https://bambuddy.dtavana.dev
-      description: Bambu printer tools
-      namespace: bambuddy-system
-      app: bambuddy
+    - Bambuddy:
+        icon: mdi-printer-3d
+        href: https://bambuddy.dtavana.dev
+        description: Bambu printer tools
+        namespace: bambuddy-system
+        app: bambuddy
 - Home:
-  - Home Assistant:
-      icon: home-assistant.png
-      href: https://hass.dtavana.dev
-      description: Home automation hub
-      namespace: hass-system
-      app: home-assistant
+    - Home Assistant:
+        icon: home-assistant.png
+        href: https://hass.dtavana.dev
+        description: Home automation hub
+        namespace: hass-system
+        app: home-assistant
