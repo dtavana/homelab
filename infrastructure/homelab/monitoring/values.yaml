@@ -1,5 +1,4 @@
 fullnameOverride: kube-prometheus-stack
-
 grafana:
   enabled: true
   defaultDashboardsTimezone: America/New_York
@@ -19,7 +18,6 @@ grafana:
       - secretName: grafana-tls
         hosts:
           - grafana.internal.dtavana.dev
-
 alertmanager:
   enabled: true
   ingress:
@@ -44,7 +42,6 @@ alertmanager:
           resources:
             requests:
               storage: 2Gi
-
 prometheus:
   ingress:
     enabled: true
@@ -76,12 +73,9 @@ prometheus:
           resources:
             requests:
               storage: 20Gi
-
 kubeControllerManager:
   enabled: false
-
 kubeEtcd:
   enabled: false
-
 kubeScheduler:
   enabled: false
