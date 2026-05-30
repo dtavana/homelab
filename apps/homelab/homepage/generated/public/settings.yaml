@@ -1,0 +1,29 @@
+theme: dark
+color: slate
+headerStyle: boxed
+layout:
+  Home:
+    style: row
+    columns: 3
+  Cluster:
+    style: row
+    columns: 3
+  Data:
+    style: row
+    columns: 3
+  Devices:
+    style: row
+    columns: 3
+  Public:
+    style: row
+    columns: 3
+  Internal:
+    style: row
+    columns: 3
+title: Homelab
+instanceName: public
+hideVersion: true
+quicklaunch:
+  searchDescriptions: true
+  hideInternetSearch: false
+  showSearchSuggestions: true
