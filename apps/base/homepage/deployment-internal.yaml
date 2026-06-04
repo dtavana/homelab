@@ -79,6 +79,10 @@ spec:
               name: homepage-config
               subPath: kubernetes.yaml
               readOnly: true
+            - mountPath: /app/config/proxmox.yaml
+              name: homepage-config
+              subPath: proxmox.yaml
+              readOnly: true
             - mountPath: /app/config/services.yaml
               name: homepage-config
               subPath: services.yaml
