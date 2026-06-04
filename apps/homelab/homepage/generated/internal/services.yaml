@@ -57,9 +57,17 @@
         namespace: pihole-system
         app: pihole
 - Internal:
+    - Alertmanager:
+        icon: mdi-web
+        href: https://alertmanager.internal.dtavana.dev
+        description: nginx-internal ingress
     - Govee2mqtt:
         icon: mdi-web
         href: https://govee2mqtt.internal.dtavana.dev
+        description: nginx-internal ingress
+    - Grafana:
+        icon: mdi-web
+        href: https://grafana.internal.dtavana.dev
         description: nginx-internal ingress
     - Mqtt:
         icon: mdi-web
@@ -70,4 +78,8 @@
     - Mqttx:
         icon: mdi-web
         href: https://mqttx.internal.dtavana.dev
+        description: nginx-internal ingress
+    - Prometheus:
+        icon: mdi-web
+        href: https://prometheus.internal.dtavana.dev
         description: nginx-internal ingress

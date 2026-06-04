@@ -214,4 +214,6 @@ services = ingresses
   File.write(File.join(dir, "custom.js"), "")
 end
 
+system("yamlfmt", "-conf", ".yamlfmt.yaml", OUTPUT_ROOT, chdir: ROOT) if system("which", "yamlfmt", out: File::NULL)
+
 warn "Wrote Homepage config to #{OUTPUT_ROOT}"
