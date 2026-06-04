@@ -6,6 +6,8 @@ metadata:
   labels:
     app.kubernetes.io/name: homepage
     app.kubernetes.io/instance: internal
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
 spec:
   ingressClassName: nginx-internal
   rules:
@@ -29,3 +31,8 @@ spec:
                 name: homepage-internal
                 port:
                   name: http
+  tls:
+    - secretName: homepage-internal-tls
+      hosts:
+        - homepage.internal.dtavana.dev
+        - homepage.dtavana.dev
