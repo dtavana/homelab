@@ -27,6 +27,14 @@
       "labels": ["renovate", "helm", "automerge"]
     },
     {
+      "description": "Keep kube-prometheus-stack updates manual because monitoring upgrades can pass CI but fail at runtime.",
+      "matchDatasources": ["helm"],
+      "matchPackageNames": ["kube-prometheus-stack"],
+      "automerge": false,
+      "dependencyDashboardApproval": true,
+      "labels": ["renovate", "helm", "manual-approval"]
+    },
+    {
       "description": "Require manual approval for higher-risk Helm chart changes.",
       "matchDatasources": ["helm"],
       "matchUpdateTypes": ["minor", "major"],
