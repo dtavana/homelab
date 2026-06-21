@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ha-mcp-token
+  namespace: hass-system
+type: Opaque
+stringData:
+  HOMEASSISTANT_TOKEN: ENC[AES256_GCM,data:FMwoy+wfNoeLT0iD1/e1ll8C2n0tEMIMVlFJ8fXeevcykuKiZE8zs73iDoDJatXMZfIYuqeh8JM+lZEcNCdUDAdol//MURq4SNF9rIYGXmQsQn46gopnASCTVr+W4lhkpZhoUaBw0xKyaIPzOqONau+boOguNbihrkZ4QIEt3eIR+oDUMPQgPqFSL6pLzco6D5YsfAlqAJF2kQR3PffS0FzsjaESvtvwRjWSqiJoOXwHN1eBw++C,iv:mSTMUBwGgMrf6wUALsRx6hdVfgWgxm3bW5f7PuG/rfw=,tag:b3S6HDfJjwYJhpEkGCq1Ww==,type:str]
+sops:
+  lastmodified: "2026-06-20T23:48:22Z"
+  mac: ENC[AES256_GCM,data:yjbvd+JDwcPttRIlypK+AhZMLopwdzSSC9nm8Q8e23UcMEvKyzovjQcNzImRuPgI2CvtHLv7VUqS3s7k0Rgf3c2ARl9l3sCAPEdS0gCZx1AMDGgJ2joC9GhElci7tMxrWU6sjF8ZAq3Lz+Z2d16MYeztSJ/xD+9d3t/OiKSwg2w=,iv:iqP0R8o8guwa1FkuDBlyY4/14FcxwzMkeTorjiDKlxg=,tag:YU3IhvX13NZdp6QC8sjXMg==,type:str]
+  pgp:
+    - created_at: "2026-06-20T23:41:24Z"
+      enc: |-
+        -----BEGIN PGP MESSAGE-----
+
+        hQIMA3cGL9xUmwxMAQ/9EjCCg7WtfhUtZ8Vuk2H5/4Q1an874MvlQy8fpTnikEX3
+        eg8KEjS7ph+6y/oxqAQueb1uwORpC4ngjGqOt+0bdiPsDywDs/qhwBtB6FfQItU+
+        pa8kAofocXPl5Z/781FqSAB+B8pu4f4N03YfarKEMGYhlVcCudPw5iBDCG8p+x5C
+        HLBdRBTUKu9WPWZqdrc5LFXBNv9ATn1ZAWbyp8t7RN0UOzMu9Q6V3sIH6KeiPWqn
+        GWWt4sYhLwNBTmYYHTai62r3UYdH2CeC9j98vbHs5EugCDCFoZKC+TSvubr4fFWw
+        CYyUytxvO1OxLBefcylgAQKj6BxYzlrpLv7AH7kC10wBUyHSJwvRjpVgasQGO4X8
+        9TZQVBGcLypk8MFaqmTot1gGv6O+bUQUcT6iav2oyebuJiqyAxSzrpb985oFNGzh
+        MMKeKntbwPvAM4JpK94HRNIkPlTx6J/Bqe9oXUYhOeE+Atifrgl3csKpu+Gsnyv4
+        zgaXaidx4DHJiYAOc08fCqpZvsTNuRcOeR9n23W02p+jrg+GRlvKgorVhXjvxVNw
+        bFNy1Ash8IMrr8vA7W4Q5M0rNP7s23GEXfs/vq0Vx3f0Bf8zb3jskADFZ9hdHUJg
+        oW5D/GrMDaqINMD9/Rdh6eaqnSNKoYSVvKqHDtMvhipLKWfGLJEWwxJ5/HjHFwPU
+        ZgEJAhBy+MfrA1o08g8a/TiMvfUo411jp+ZhXrd4W3YO02RFMW0BgVmzTChWf9RU
+        OeW+MMSuNjF6FkLWqh/z5BWLzCJjObfPHrOjK+kknkn+GL7VGpEIAb1H9Bw4O4cW
+        3lzQZk/ASg==
+        =WXTL
+        -----END PGP MESSAGE-----
+      fp: A846E73A713180DC60FA2A722DADD3F1DC5D54EC
+  encrypted_regex: ^(data|stringData|email)$
+  version: 3.11.0

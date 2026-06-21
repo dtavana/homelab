@@ -1,0 +1,54 @@
+controllers:
+  main:
+    containers:
+      main:
+        image:
+          repository: ghcr.io/homeassistant-ai/ha-mcp
+          # renovate: datasource=docker depName=ghcr.io/homeassistant-ai/ha-mcp
+          tag: stable
+        command:
+          - ha-mcp-web
+        env:
+          HOMEASSISTANT_URL: http://home-assistant.hass-system.svc.cluster.local:8123
+          ENABLE_WEBSOCKET: "true"
+          ENABLE_TOOL_SEARCH: "false"
+          ENABLE_TOOL_SECURITY_POLICIES: "true"
+          READ_ONLY_MODE: "false"
+          LOG_LEVEL: INFO
+          MCP_SERVER_NAME: ha-mcp
+        envFrom:
+          - secretRef:
+              name: ha-mcp-token
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+service:
+  main:
+    controller: main
+    ports:
+      http:
+        port: 8086
+ingress:
+  main:
+    enabled: true
+    className: nginx-internal
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-production
+      nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+      nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+      nginx.ingress.kubernetes.io/proxy-buffering: "off"
+    hosts:
+      - host: ha-mcp.internal.dtavana.dev
+        paths:
+          - path: /
+            service:
+              identifier: main
+              port: http
+    tls:
+      - hosts:
+          - ha-mcp.internal.dtavana.dev
+        secretName: ha-mcp-tls

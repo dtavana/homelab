@@ -69,6 +69,10 @@
         icon: mdi-web
         href: https://grafana.internal.dtavana.dev
         description: nginx-internal ingress
+    - Ha Mcp:
+        icon: mdi-web
+        href: https://ha-mcp.internal.dtavana.dev
+        description: nginx-internal ingress
     - Mqtt:
         icon: mdi-web
         href: https://mqtt.internal.dtavana.dev
