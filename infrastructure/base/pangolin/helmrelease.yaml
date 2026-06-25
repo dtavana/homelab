@@ -17,6 +17,20 @@ spec:
   valuesFrom:
     - kind: ConfigMap
       name: newt-values
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: Deployment
+              name: newt-system-pangolin-newt-newt-main-tunnel
+            patch: |
+              apiVersion: apps/v1
+              kind: Deployment
+              metadata:
+                name: newt-system-pangolin-newt-newt-main-tunnel
+              spec:
+                strategy:
+                  type: Recreate
   install:
     remediation:
       retries: 3
