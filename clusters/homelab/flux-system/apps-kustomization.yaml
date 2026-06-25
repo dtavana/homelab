@@ -16,10 +16,6 @@ spec:
   healthChecks:
     - apiVersion: helm.toolkit.fluxcd.io/v2
       kind: HelmRelease
-      name: bambuddy
-      namespace: flux-system
-    - apiVersion: helm.toolkit.fluxcd.io/v2
-      kind: HelmRelease
       name: beszel
       namespace: flux-system
     - apiVersion: helm.toolkit.fluxcd.io/v2
