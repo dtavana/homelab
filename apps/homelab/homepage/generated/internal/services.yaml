@@ -25,12 +25,6 @@
         namespace: dbgate-system
         app: dbgate
 - Devices:
-    - Bambuddy:
-        icon: mdi-printer-3d
-        href: https://bambuddy.dtavana.dev
-        description: Bambu printer tools
-        namespace: bambuddy-system
-        app: bambuddy
     - Beszel:
         icon: beszel.png
         href: https://beszel.internal.dtavana.dev

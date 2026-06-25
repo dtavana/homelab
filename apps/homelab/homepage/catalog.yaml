@@ -43,14 +43,6 @@ overrides:
     namespace: hass-system
     app: home-assistant
     visibility: public
-  bambuddy.dtavana.dev:
-    name: Bambuddy
-    icon: mdi-printer-3d
-    description: Bambu printer tools
-    group: Devices
-    namespace: bambuddy-system
-    app: bambuddy
-    visibility: public
   pihole.internal.dtavana.dev:
     name: Pi-hole
     icon: pi-hole.png
