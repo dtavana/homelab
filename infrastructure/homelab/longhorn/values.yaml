@@ -2,6 +2,7 @@ defaultSettings:
   defaultDataPath: "/var/lib/longhorn/"
   defaultDataLocality: "disabled"
   defaultReplicaCount: '{"v1":"3","v2":"3"}'
+  nodeDownPodDeletionPolicy: "delete-both-statefulset-and-deployment-pod"
   replicaSoftAntiAffinity: false
   replicaAutoBalance: "disabled"
   storageMinimalAvailablePercentage: 25
