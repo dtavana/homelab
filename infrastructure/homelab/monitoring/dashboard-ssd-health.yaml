@@ -1,0 +1,66 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ssd-health-dashboard
+  namespace: monitoring-system
+  labels:
+    grafana_dashboard: "1"
+data:
+  ssd-health.json: |-
+    {
+      "title": "SSD Health",
+      "uid": "ssd-health",
+      "timezone": "America/New_York",
+      "schemaVersion": 39,
+      "version": 1,
+      "refresh": "1m",
+      "panels": [
+        {
+          "id": 1,
+          "type": "timeseries",
+          "title": "SMART health",
+          "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "targets": [{"expr": "smartctl_health", "legendFormat": "{{instance}} {{device}}", "refId": "A"}],
+          "fieldConfig": {"defaults": {"min": 0, "max": 1, "thresholds": {"mode": "absolute", "steps": [{"color": "red", "value": null}, {"color": "green", "value": 1}]}}},
+          "options": {"legend": {"displayMode": "list", "placement": "bottom"}}
+        },
+        {
+          "id": 2,
+          "type": "timeseries",
+          "title": "Reallocated / pending / uncorrectable sectors",
+          "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "targets": [
+            {"expr": "smartctl_reallocated_sectors", "legendFormat": "reallocated {{instance}} {{device}}", "refId": "A"},
+            {"expr": "smartctl_pending_sectors", "legendFormat": "pending {{instance}} {{device}}", "refId": "B"},
+            {"expr": "smartctl_uncorrectable_sectors", "legendFormat": "uncorrectable {{instance}} {{device}}", "refId": "C"}
+          ],
+          "fieldConfig": {"defaults": {"min": 0}},
+          "options": {"legend": {"displayMode": "list", "placement": "bottom"}}
+        },
+        {
+          "id": 3,
+          "type": "timeseries",
+          "title": "SSD temperature",
+          "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "targets": [{"expr": "smartctl_temperature_celsius > 0", "legendFormat": "{{instance}} {{device}}", "refId": "A"}],
+          "fieldConfig": {"defaults": {"unit": "celsius", "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}, {"color": "orange", "value": 50}, {"color": "red", "value": 60}]}}},
+          "options": {"legend": {"displayMode": "list", "placement": "bottom"}}
+        },
+        {
+          "id": 4,
+          "type": "timeseries",
+          "title": "Disk I/O wait and pressure",
+          "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "targets": [
+            {"expr": "sum by (instance) (rate(node_cpu_seconds_total{mode=\"iowait\"}[5m])) * 100", "legendFormat": "iowait {{instance}}", "refId": "A"},
+            {"expr": "rate(node_pressure_io_stalled_seconds_total[5m]) * 100", "legendFormat": "I/O pressure {{instance}}", "refId": "B"}
+          ],
+          "fieldConfig": {"defaults": {"unit": "percent"}},
+          "options": {"legend": {"displayMode": "list", "placement": "bottom"}}
+        }
+      ]
+    }

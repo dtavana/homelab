@@ -5,6 +5,8 @@ generatorOptions:
 resources:
   - ../../base/monitoring
   - dashboard-homelab-overview.yaml
+  - dashboard-ssd-health.yaml
+  - smartmon-prometheusrule.yaml
 configMapGenerator:
   - name: kube-prometheus-stack-values
     namespace: flux-system

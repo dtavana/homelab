@@ -1,4 +1,13 @@
 fullnameOverride: kube-prometheus-stack
+prometheus-node-exporter:
+  extraArgs:
+    - --collector.textfile.directory=/host/var/lib/node_exporter/textfile_collector
+  extraHostVolumeMounts:
+    - name: smartmon-textfile
+      hostPath: /var/lib/node_exporter/textfile_collector
+      mountPath: /host/var/lib/node_exporter/textfile_collector
+      readOnly: true
+      mountPropagation: HostToContainer
 grafana:
   enabled: true
   defaultDashboardsTimezone: America/New_York
