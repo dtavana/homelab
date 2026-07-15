@@ -1,0 +1,59 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: smartmon-alerts
+  namespace: monitoring-system
+  labels:
+    release: kube-prometheus-stack
+spec:
+  groups:
+    - name: smartmon.rules
+      rules:
+        - alert: SmartctlHealthFailed
+          expr: smartctl_supported == 1 and smartctl_health == 0
+          for: 15m
+          labels:
+            severity: critical
+          annotations:
+            summary: "SMART health failed on {{ $labels.instance }} {{ $labels.device }}"
+            description: "The drive reports a failed SMART health status. Replace or investigate the drive immediately."
+        - alert: SmartctlUnavailable
+          expr: smartctl_supported == 0
+          for: 30m
+          labels:
+            severity: warning
+          annotations:
+            summary: "SMART data unavailable on {{ $labels.instance }} {{ $labels.device }}"
+            description: "smartctl cannot read this drive; verify smartmontools support and device access."
+        - alert: SmartctlReallocatedSectors
+          expr: smartctl_reallocated_sectors > 0
+          for: 1h
+          labels:
+            severity: warning
+          annotations:
+            summary: "Drive has reallocated sectors on {{ $labels.instance }} {{ $labels.device }}"
+            description: "SMART reports {{ $value }} reallocated sectors. Back up data and plan drive replacement."
+        - alert: SmartctlPendingSectors
+          expr: smartctl_pending_sectors > 0
+          for: 15m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Drive has pending sectors on {{ $labels.instance }} {{ $labels.device }}"
+            description: "SMART reports sectors waiting for reallocation; check backups and replace the drive if this persists."
+        - alert: SmartctlUncorrectableSectors
+          expr: smartctl_uncorrectable_sectors > 0
+          for: 15m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Drive has uncorrectable sectors on {{ $labels.instance }} {{ $labels.device }}"
+            description: "SMART reports uncorrectable sectors; treat the drive as unreliable."
+        - alert: SmartctlTemperatureHigh
+          expr: smartctl_temperature_celsius > 60
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Drive temperature high on {{ $labels.instance }} {{ $labels.device }}"
+            description: "SMART reports {{ $value }}°C; improve cooling and investigate sustained load."

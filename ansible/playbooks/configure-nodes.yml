@@ -23,8 +23,124 @@
           - nano
           - open-iscsi
           - nfs-common
+          - smartmontools
         state: present
         update_cache: yes
+      tags:
+        - smartmon
+    - name: Create node-exporter textfile collector directory
+      ansible.builtin.file:
+        path: /var/lib/node_exporter/textfile_collector
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+      tags:
+        - smartmon
+    - name: Install SMART metrics collector
+      ansible.builtin.copy:
+        dest: /usr/local/sbin/smartmon-textfile
+        owner: root
+        group: root
+        mode: "0755"
+        content: |
+          #!/usr/bin/env bash
+          set -u
+
+          output_dir=/var/lib/node_exporter/textfile_collector
+          output_file="$output_dir/smartmon.prom"
+          temporary_file="$(mktemp "$output_dir/.smartmon.prom.XXXXXX")"
+          trap 'rm -f "$temporary_file"' EXIT
+
+          {
+            echo '# HELP smartctl_health SMART overall health status (1=passed, 0=failed or unavailable).'
+            echo '# TYPE smartctl_health gauge'
+            echo '# HELP smartctl_supported Whether smartctl could read the device (1=yes, 0=no).'
+            echo '# TYPE smartctl_supported gauge'
+            echo '# HELP smartctl_reallocated_sectors Reallocated sectors reported by SMART.'
+            echo '# TYPE smartctl_reallocated_sectors gauge'
+            echo '# HELP smartctl_pending_sectors Sectors pending reallocation reported by SMART.'
+            echo '# TYPE smartctl_pending_sectors gauge'
+            echo '# HELP smartctl_uncorrectable_sectors Uncorrectable sectors reported by SMART.'
+            echo '# TYPE smartctl_uncorrectable_sectors gauge'
+            echo '# HELP smartctl_temperature_celsius Drive temperature in Celsius.'
+            echo '# TYPE smartctl_temperature_celsius gauge'
+
+            while read -r device device_type; do
+              [ "$device_type" = disk ] || continue
+              smart_output="$(smartctl -H -A "$device" 2>/dev/null || true)"
+              supported=0
+              health=0
+              [ -n "$smart_output" ] && supported=1
+              grep -Eq 'SMART overall-health self-assessment test result: PASSED|SMART Health Status: OK' <<< "$smart_output" && health=1
+
+              reallocated="$(awk '$2 == "Reallocated_Sector_Ct" || $2 == "Reallocated_Event_Count" {print $NF; exit}' <<< "$smart_output")"
+              pending="$(awk '$2 == "Current_Pending_Sector" {print $NF; exit}' <<< "$smart_output")"
+              uncorrectable="$(awk '$2 == "Offline_Uncorrectable" || $2 == "Reported_Uncorrect" {print $NF; exit}' <<< "$smart_output")"
+              temperature="$(awk '$1 ~ /^[0-9]+$/ && ($2 == "Temperature_Celsius" || $2 == "Airflow_Temperature_Cel") {print $10; exit}' <<< "$smart_output")"
+
+              [[ "$reallocated" =~ ^[0-9]+$ ]] || reallocated=0
+              [[ "$pending" =~ ^[0-9]+$ ]] || pending=0
+              [[ "$uncorrectable" =~ ^[0-9]+$ ]] || uncorrectable=0
+              [[ "$temperature" =~ ^-?[0-9]+$ ]] || temperature=0
+
+              printf 'smartctl_health{device="%s"} %s\n' "$device" "$health"
+              printf 'smartctl_supported{device="%s"} %s\n' "$device" "$supported"
+              printf 'smartctl_reallocated_sectors{device="%s"} %s\n' "$device" "$reallocated"
+              printf 'smartctl_pending_sectors{device="%s"} %s\n' "$device" "$pending"
+              printf 'smartctl_uncorrectable_sectors{device="%s"} %s\n' "$device" "$uncorrectable"
+              printf 'smartctl_temperature_celsius{device="%s"} %s\n' "$device" "$temperature"
+            done < <(lsblk -dnpo NAME,TYPE)
+          } > "$temporary_file"
+
+          chown root:root "$temporary_file"
+          chmod 0644 "$temporary_file"
+          mv "$temporary_file" "$output_file"
+      tags:
+        - smartmon
+    - name: Install SMART metrics systemd service
+      ansible.builtin.copy:
+        dest: /etc/systemd/system/smartmon-textfile.service
+        owner: root
+        group: root
+        mode: "0644"
+        content: |
+          [Unit]
+          Description=Export SMART health metrics for node-exporter
+          After=local-fs.target
+
+          [Service]
+          Type=oneshot
+          ExecStart=/usr/local/sbin/smartmon-textfile
+      tags:
+        - smartmon
+    - name: Install SMART metrics systemd timer
+      ansible.builtin.copy:
+        dest: /etc/systemd/system/smartmon-textfile.timer
+        owner: root
+        group: root
+        mode: "0644"
+        content: |
+          [Unit]
+          Description=Refresh SMART health metrics
+
+          [Timer]
+          OnBootSec=2min
+          OnUnitActiveSec=15min
+          Persistent=true
+
+          [Install]
+          WantedBy=timers.target
+      tags:
+        - smartmon
+    - name: Enable and start SMART metrics timer
+      ansible.builtin.systemd:
+        name: smartmon-textfile.timer
+        state: started
+        enabled: true
+        daemon_reload: true
+      tags:
+        - smartmon
     - name: Ensure multipath configuration directory exists
       ansible.builtin.file:
         path: /etc/multipath/conf.d

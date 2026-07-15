@@ -28,3 +28,8 @@ When generating or modifying Kubernetes manifests and Flux GitOps resources in t
 ### Secrets & Encryption (SOPS)
 9. **SOPS Naming:** Any secret storing sensitive data must be named matching the `*.sops.yaml` pattern (e.g., `secret.sops.yaml`, `govee-credentials.sops.yaml`).
 10. **Flux Integration:** Flux handles SOPS decryption natively at the top-level `Kustomization` tier (`clusters/homelab/flux-system/infra-kustomization.yaml`). You do not need to annotate the SOPS files manually for Flux, just ensure they are validly encrypted via `sops` before git commits.
+
+### Live Home Assistant Changes
+11. **Use HA MCP First:** When inspecting or modifying live Home Assistant state, entities, services, automations, scripts, scenes, helpers, or configuration, use the Home Assistant MCP server (`ha-mcp`) first whenever it is available in the current agent session.
+12. **Avoid Direct PVC Edits by Default:** Do not edit live Home Assistant files through Kubernetes exec/cp, pod shell access, or PVC-level filesystem changes unless the HA MCP server is unavailable, insufficient for the specific task, or the user explicitly requests direct Kubernetes/file access.
+13. **State the Fallback:** If falling back from HA MCP to Kubernetes, Home Assistant UI, or file-level access, state the reason before making live changes.
