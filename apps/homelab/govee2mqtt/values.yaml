@@ -4,8 +4,8 @@ controllers:
       main:
         image:
           repository: ghcr.io/wez/govee2mqtt
-          # renovate: datasource=docker depName=ghcr.io/wez/govee2mqtt versioning=loose
-          tag: 2026.04.12-6f5a8449
+          # renovate: datasource=docker depName=ghcr.io/wez/govee2mqtt versioning=docker
+          tag: latest@sha256:d5427fa1524e3e6f87c59e5cbc59e782036a2b5274e4f96cfb581d844aa2b6dc
         env:
           GOVEE_MQTT_HOST: mosquitto.mqtt-broker-system.svc.cluster.local
           GOVEE_MQTT_PORT: 1883
