@@ -1,8 +1,9 @@
-apiVersion: source.toolkit.fluxcd.io/v1beta2
-kind: OCIRepository
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
 metadata:
   name: kubernetes-mcp-server
   namespace: flux-system
 spec:
   interval: 1h
-  url: oci://ghcr.io/containers/charts/kubernetes-mcp-server
+  type: oci
+  url: oci://ghcr.io/containers/charts
