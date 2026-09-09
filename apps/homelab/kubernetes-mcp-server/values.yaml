@@ -1,0 +1,111 @@
+image:
+  registry: ghcr.io
+  repository: containers/kubernetes-mcp-server
+  # renovate: datasource=docker depName=ghcr.io/containers/kubernetes-mcp-server
+  version: v0.0.66
+serviceAccount:
+  automountToken: true
+rbac:
+  create: true
+  extraClusterRoles:
+    - name: confirmed-operations
+      rules:
+        - apiGroups: [""]
+          resources:
+            - configmaps
+            - endpoints
+            - events
+            - namespaces
+            - nodes
+            - persistentvolumeclaims
+            - persistentvolumes
+            - pods
+            - replicationcontrollers
+            - resourcequotas
+            - serviceaccounts
+            - services
+          verbs: [get, list, watch, create, update, patch, delete, deletecollection]
+        - apiGroups: [""]
+          resources:
+            - pods/log
+          verbs: [get]
+        - apiGroups: [""]
+          resources:
+            - pods/attach
+            - pods/exec
+            - pods/portforward
+          verbs: [connect]
+        - apiGroups: ["apps"]
+          resources: [daemonsets, deployments, replicasets, statefulsets]
+          verbs: [get, list, watch, create, update, patch, delete, deletecollection]
+        - apiGroups: ["batch"]
+          resources: [cronjobs, jobs]
+          verbs: [get, list, watch, create, update, patch, delete, deletecollection]
+        - apiGroups: ["autoscaling"]
+          resources: [horizontalpodautoscalers]
+          verbs: [get, list, watch, create, update, patch, delete, deletecollection]
+        - apiGroups: ["discovery.k8s.io"]
+          resources: [endpointslices]
+          verbs: [get, list, watch]
+        - apiGroups: ["networking.k8s.io"]
+          resources: [ingresses, ingressclasses, networkpolicies]
+          verbs: [get, list, watch, create, update, patch, delete, deletecollection]
+        - apiGroups: ["policy"]
+          resources: [poddisruptionbudgets]
+          verbs: [get, list, watch, create, update, patch, delete, deletecollection]
+        - apiGroups: ["storage.k8s.io"]
+          resources: [storageclasses, volumeattachments]
+          verbs: [get, list, watch]
+        - apiGroups: ["metrics.k8s.io"]
+          resources: [nodes, pods]
+          verbs: [get, list]
+        - apiGroups: ["source.toolkit.fluxcd.io"]
+          resources: [gitrepositories, helmrepositories, ocirepositories]
+          verbs: [get, list, watch]
+        - apiGroups: ["helm.toolkit.fluxcd.io"]
+          resources: [helmreleases]
+          verbs: [get, list, watch]
+        - apiGroups: ["kustomize.toolkit.fluxcd.io"]
+          resources: [kustomizations]
+          verbs: [get, list, watch]
+  extraClusterRoleBindings:
+    - name: confirmed-operations
+      roleRef:
+        name: confirmed-operations
+ingress:
+  enabled: true
+  className: nginx-internal
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+  host: kubernetes-mcp.internal.dtavana.dev
+  path: /
+  pathType: Prefix
+  tls:
+    secretName: kubernetes-mcp-server-tls
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+config:
+  port: "{{ .Values.service.port }}"
+  log_level: 2
+  stateless: true
+  read_only: false
+  confirmation_fallback: deny
+  confirmation_rules:
+    - verb: create
+      message: "This will create a Kubernetes resource. Review the exact resource and namespace before approving."
+    - verb: update
+      message: "This will update a Kubernetes resource. Review the exact resource and namespace before approving."
+    - verb: patch
+      message: "This will patch a Kubernetes resource. Review the exact resource and namespace before approving."
+    - verb: delete
+      message: "This will delete a Kubernetes resource. Review the exact resource and namespace before approving."
+    - verb: deletecollection
+      message: "This will delete multiple Kubernetes resources. Review the selector and namespace before approving."
+    - verb: connect
+      message: "This will connect to a Kubernetes pod (exec, attach, or port-forward). Review the target before approving."
+  cluster_provider_strategy: in-cluster

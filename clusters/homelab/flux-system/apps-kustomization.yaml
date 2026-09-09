@@ -54,6 +54,10 @@ spec:
       kind: HelmRelease
       name: zigbee2mqtt
       namespace: flux-system
+    - apiVersion: helm.toolkit.fluxcd.io/v2
+      kind: HelmRelease
+      name: kubernetes-mcp-server
+      namespace: flux-system
   decryption:
     provider: sops
     secretRef:
