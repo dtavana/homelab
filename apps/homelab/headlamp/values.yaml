@@ -6,8 +6,10 @@ config:
   # account. This intentionally removes the token prompt; access is limited
   # to clients that can reach the internal ingress.
   unsafeUseServiceAccountToken: true
-  # Keep the browser session valid for one year.
-  sessionTTL: 31536000
+  # Keep the browser session valid for one year. Keep this as a string so the
+  # valuesFrom ConfigMap does not render it in scientific notation.
+  extraArgs:
+    - "-session-ttl=31536000"
 ingress:
   enabled: true
   ingressClassName: "nginx-internal"
