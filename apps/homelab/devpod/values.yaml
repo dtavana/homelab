@@ -4,19 +4,12 @@ controllers:
     containers:
       main:
         image:
-          repository: lscr.io/linuxserver/openssh-server
-          tag: latest
+          repository: ghcr.io/dtavana/homelab-devpod
+          tag: ubuntu-24.04
+          pullPolicy: Always
         env:
-          PUID: "1000"
-          PGID: "1000"
           TZ: America/New_York
-          USER_NAME: dev
-          SUDO_ACCESS: "true"
-          PASSWORD_ACCESS: "false"
-          LOG_STDOUT: "true"
           PUBLIC_KEY_URL: https://github.com/dtavana.keys
-          DOCKER_MODS: lscr.io/linuxserver/mods:universal-package-install
-          INSTALL_PACKAGES: bash|build-base|curl|fd|git|go|jq|nano|nodejs|npm|py3-pip|python3|ripgrep|tmux|unzip|wget|zip
         resources:
           requests:
             cpu: 500m
@@ -45,4 +38,4 @@ persistence:
     size: 30Gi
     retain: true
     globalMounts:
-      - path: /config
+      - path: /home/dev
