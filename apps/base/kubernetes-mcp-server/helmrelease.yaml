@@ -10,7 +10,7 @@ spec:
       chart: kubernetes-mcp-server
       version: "0.1.0"
       sourceRef:
-        kind: OCIRepository
+        kind: HelmRepository
         name: kubernetes-mcp-server
         namespace: flux-system
   targetNamespace: kubernetes-mcp-system
