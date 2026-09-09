@@ -1,3 +1,6 @@
+image:
+  # v0.43.0 adds unsafeUseServiceAccountToken support.
+  tag: "v0.43.0"
 config:
   # Authenticate every browser session with the Headlamp pod's service
   # account. This intentionally removes the token prompt; access is limited
