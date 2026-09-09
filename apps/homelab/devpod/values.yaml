@@ -16,7 +16,7 @@ controllers:
           LOG_STDOUT: "true"
           PUBLIC_KEY_URL: https://github.com/dtavana.keys
           DOCKER_MODS: lscr.io/linuxserver/mods:universal-package-install
-          INSTALL_PACKAGES: bash|build-base|curl|fd|git|go|jq|neovim|nodejs|npm|py3-pip|python3|ripgrep|tmux|unzip|wget|zip
+          INSTALL_PACKAGES: bash|build-base|curl|fd|git|go|jq|nano|nodejs|npm|py3-pip|python3|ripgrep|tmux|unzip|wget|zip
         resources:
           requests:
             cpu: 500m
