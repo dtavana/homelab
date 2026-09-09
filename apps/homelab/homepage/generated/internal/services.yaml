@@ -67,6 +67,10 @@
         icon: mdi-web
         href: https://ha-mcp.internal.dtavana.dev
         description: nginx-internal ingress
+    - Kubernetes Mcp:
+        icon: mdi-web
+        href: https://kubernetes-mcp.internal.dtavana.dev
+        description: nginx-internal ingress
     - Mqtt:
         icon: mdi-web
         href: https://mqtt.internal.dtavana.dev

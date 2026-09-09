@@ -1,0 +1,26 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: kubernetes-mcp-server
+  namespace: flux-system
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: kubernetes-mcp-server
+      version: "0.1.0"
+      sourceRef:
+        kind: OCIRepository
+        name: kubernetes-mcp-server
+        namespace: flux-system
+  targetNamespace: kubernetes-mcp-system
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+      strategy: rollback
+  valuesFrom:
+    - kind: ConfigMap
+      name: kubernetes-mcp-server-values

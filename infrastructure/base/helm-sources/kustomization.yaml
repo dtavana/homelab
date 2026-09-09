@@ -12,3 +12,4 @@ resources:
   - app-template-helmrepo.yaml
   - cloudnative-pg-helmrepo.yaml
   - prometheus-community-helmrepo.yaml
+  - kubernetes-mcp-server-oci.yaml
