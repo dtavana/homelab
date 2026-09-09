@@ -15,3 +15,4 @@ resources:
   - ./dbgate
   - ./homepage
   - ./kubernetes-mcp-server
+  - ./devpod
