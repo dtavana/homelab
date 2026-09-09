@@ -2,10 +2,9 @@ config:
   # Authenticate every browser session with the Headlamp pod's service
   # account. This intentionally removes the token prompt; access is limited
   # to clients that can reach the internal ingress.
-  extraArgs:
-    - "-unsafe-use-service-account-token=true"
-    # Keep the browser session valid for one year.
-    - "-session-ttl=31536000"
+  unsafeUseServiceAccountToken: true
+  # Keep the browser session valid for one year.
+  sessionTTL: 31536000
 ingress:
   enabled: true
   ingressClassName: "nginx-internal"
