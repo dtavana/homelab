@@ -34,7 +34,7 @@ jobs:
             type=raw,value=ubuntu-24.04
             type=sha
       - name: Build and push image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: ./images/devpod
           push: true
