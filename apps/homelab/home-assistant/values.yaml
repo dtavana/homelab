@@ -1,6 +1,5 @@
-defaultPodOptions:
-  hostNetwork: true
-  dnsPolicy: ClusterFirstWithHostNet
+hostNetwork: true
+dnsPolicy: ClusterFirstWithHostNet
 persistence:
   enabled: true
   existingClaim: ""
