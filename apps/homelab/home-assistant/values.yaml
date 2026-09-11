@@ -20,6 +20,9 @@ configuration:
   trusted_proxies:
     - "10.42.0.0/16"
     - "10.43.0.0/16"
+    - "10.10.10.11/32"
+    - "10.10.10.12/32"
+    - "10.10.10.13/32"
 env:
   - name: TZ
     value: "America/New_York"
