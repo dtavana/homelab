@@ -16,7 +16,7 @@ ingress:
           pathType: Prefix
 configuration:
   enabled: true
-  forceInit: false
+  forceInit: true
   trusted_proxies:
     - "10.42.0.0/16"
     - "10.43.0.0/16"
