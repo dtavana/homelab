@@ -102,6 +102,20 @@ codex login --device-auth
 In Codex Desktop, open Settings → Connections → SSH, add `homelab-devpod`, and
 select `/home/dev/src/homelab` as the project folder.
 
+## Shared terminal session
+
+Interactive SSH logins automatically attach to one tmux session named `work`.
+The first login creates it, and later logins reconnect to the same session after
+an SSH disconnect. Detach without stopping the session with `Ctrl-b d`:
+
+```sh
+ssh -t homelab-devpod
+```
+
+Noninteractive SSH commands continue to run directly. In particular, Codex
+Desktop's remote `codex app-server` connection is not wrapped in tmux so its
+machine-readable stdin and stdout remain unchanged.
+
 ## Kubernetes access
 
 The pod uses the `devpod-admin` service account, which is intentionally bound
@@ -111,4 +125,6 @@ direct shell commands; the existing Kubernetes MCP server's confirmation rules
 remain a soft safety boundary rather than a Kubernetes permission boundary.
 
 Pod restarts preserve repositories, Codex credentials, SSH keys, and the
-kubeconfig configuration, but terminate any in-flight process.
+kubeconfig configuration, but terminate the `work` session and any other
+in-flight process. The session persists across SSH disconnects, not pod
+restarts.
