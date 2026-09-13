@@ -14,6 +14,7 @@ fi
 
 ssh_dir="$user_home/.ssh"
 authorized_keys="$ssh_dir/authorized_keys"
+codex_home="${CODEX_HOME:-${user_home}/.codex}"
 
 bootstrap_repositories() {
     local repositories_json="${DEFAULT_REPOSITORIES_JSON:-[]}"
@@ -93,6 +94,7 @@ fi
 
 chown "$user_name:$user_name" "$user_home"
 install -d -o "$user_name" -g "$user_name" -m 0700 "$ssh_dir"
+install -d -o "$user_name" -g "$user_name" -m 0700 "$codex_home"
 if [[ ! -e "$authorized_keys" ]]; then
     install -o "$user_name" -g "$user_name" -m 0600 /dev/null "$authorized_keys"
 fi
@@ -155,6 +157,7 @@ fi
 
 if [[ -n "${DEFAULT_REPOSITORIES_JSON:-}" ]]; then
     if ! runuser -u "$user_name" -- env HOME="$user_home" USER="$user_name" \
+        GIT_TERMINAL_PROMPT=0 \
         DEFAULT_REPOSITORIES_JSON="$DEFAULT_REPOSITORIES_JSON" \
         /usr/local/bin/devpod-bootstrap; then
         echo "Repository bootstrap completed with errors; continuing startup" >&2
@@ -164,7 +167,7 @@ fi
 install -d -m 0755 /etc/ssh/sshd_config.d /run/sshd
 cat >/etc/profile.d/devpod.sh <<EOF
 export HOME=${user_home}
-export CODEX_HOME=${CODEX_HOME:-${user_home}/.codex}
+export CODEX_HOME=${codex_home}
 export KUBECONFIG=${kubeconfig_path}
 EOF
 chmod 0644 /etc/profile.d/devpod.sh
@@ -181,9 +184,7 @@ AllowUsers ${user_name}
 UsePAM yes
 X11Forwarding no
 UseDNS no
-SetEnv HOME=${user_home}
-SetEnv CODEX_HOME=${CODEX_HOME:-${user_home}/.codex}
-SetEnv KUBECONFIG=${kubeconfig_path}
+SetEnv HOME=${user_home} CODEX_HOME=${codex_home} KUBECONFIG=${kubeconfig_path}
 HostKey ${ssh_dir}/sshd_host_ed25519_key
 HostKey ${ssh_dir}/sshd_host_rsa_key
 Subsystem sftp /usr/lib/openssh/sftp-server

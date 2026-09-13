@@ -4,14 +4,22 @@ USER root
 
 ARG TARGETARCH
 ARG CODEX_VERSION=0.154.0-alpha.6.2
-ARG KUBECTL_VERSION=v1.34.1
-ARG HELM_VERSION=v3.17.3
+# renovate: datasource=github-releases depName=kubernetes/kubernetes extractVersion=^v(?<version>.*)$
+ARG KUBECTL_VERSION=1.34.1
+# renovate: datasource=github-releases depName=helm/helm extractVersion=^v(?<version>.*)$
+ARG HELM_VERSION=3.17.3
+# renovate: datasource=github-releases depName=fluxcd/flux2 extractVersion=^v(?<version>.*)$
 ARG FLUX_VERSION=2.5.1
-ARG KUSTOMIZE_VERSION=v5.6.0
+# renovate: datasource=github-releases depName=kubernetes-sigs/kustomize extractVersion=^kustomize/v(?<version>.*)$
+ARG KUSTOMIZE_VERSION=5.6.0
+# renovate: datasource=github-releases depName=cli/cli extractVersion=^v(?<version>.*)$
 ARG GH_VERSION=2.67.0
-ARG SOPS_VERSION=v3.9.4
-ARG AGE_VERSION=v1.2.0
-ARG YQ_VERSION=v4.45.1
+# renovate: datasource=github-releases depName=getsops/sops extractVersion=^v(?<version>.*)$
+ARG SOPS_VERSION=3.9.4
+# renovate: datasource=github-releases depName=FiloSottile/age extractVersion=^v(?<version>.*)$
+ARG AGE_VERSION=1.2.0
+# renovate: datasource=github-releases depName=mikefarah/yq extractVersion=^v(?<version>.*)$
+ARG YQ_VERSION=4.45.1
 
 RUN apt-get update \
     && apt-get install --no-install-recommends --yes \
@@ -59,10 +67,10 @@ RUN set -eux; \
     esac; \
     install -d -m 0755 /usr/local/bin; \
     curl --fail --silent --show-error --location \
-        "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/${TARGETARCH}/kubectl" \
+        "https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/${TARGETARCH}/kubectl" \
         --output /usr/local/bin/kubectl; \
     curl --fail --silent --show-error --location \
-        "https://get.helm.sh/helm-${HELM_VERSION}-linux-${helm_arch}.tar.gz" \
+        "https://get.helm.sh/helm-v${HELM_VERSION}-linux-${helm_arch}.tar.gz" \
         | tar -xz -C /tmp; \
     install -m 0755 "/tmp/linux-${helm_arch}/helm" /usr/local/bin/helm; \
     rm -rf "/tmp/linux-${helm_arch}"; \
@@ -70,7 +78,7 @@ RUN set -eux; \
         "https://github.com/fluxcd/flux2/releases/download/v${FLUX_VERSION}/flux_${FLUX_VERSION}_linux_${flux_arch}.tar.gz" \
         | tar -xz -C /usr/local/bin flux; \
     curl --fail --silent --show-error --location \
-        "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2F${KUSTOMIZE_VERSION}/kustomize_${KUSTOMIZE_VERSION}_linux_${kustomize_arch}.tar.gz" \
+        "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv${KUSTOMIZE_VERSION}/kustomize_v${KUSTOMIZE_VERSION}_linux_${kustomize_arch}.tar.gz" \
         | tar -xz -C /usr/local/bin kustomize; \
     curl --fail --silent --show-error --location \
         "https://github.com/cli/cli/releases/download/v${GH_VERSION}/gh_${GH_VERSION}_linux_${gh_arch}.tar.gz" \
@@ -78,15 +86,15 @@ RUN set -eux; \
     install -m 0755 "/tmp/gh_${GH_VERSION}_linux_${gh_arch}/bin/gh" /usr/local/bin/gh; \
     rm -rf "/tmp/gh_${GH_VERSION}_linux_${gh_arch}"; \
     curl --fail --silent --show-error --location \
-        "https://github.com/getsops/sops/releases/download/${SOPS_VERSION}/sops-${SOPS_VERSION}.linux.${sops_arch}" \
+        "https://github.com/getsops/sops/releases/download/v${SOPS_VERSION}/sops-v${SOPS_VERSION}.linux.${sops_arch}" \
         --output /usr/local/bin/sops; \
     curl --fail --silent --show-error --location \
-        "https://github.com/FiloSottile/age/releases/download/${AGE_VERSION}/age-${AGE_VERSION}-linux-${age_arch}.tar.gz" \
+        "https://github.com/FiloSottile/age/releases/download/v${AGE_VERSION}/age-v${AGE_VERSION}-linux-${age_arch}.tar.gz" \
         | tar -xz -C /tmp; \
     install -m 0755 "/tmp/age/age" "/tmp/age/age-keygen" /usr/local/bin/; \
     rm -rf /tmp/age; \
     curl --fail --silent --show-error --location \
-        "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_${yq_arch}" \
+        "https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_${yq_arch}" \
         --output /usr/local/bin/yq; \
     chmod 0755 /usr/local/bin/kubectl /usr/local/bin/sops /usr/local/bin/yq
 
