@@ -169,6 +169,11 @@ cat >/etc/profile.d/devpod.sh <<EOF
 export HOME=${user_home}
 export CODEX_HOME=${codex_home}
 export KUBECONFIG=${kubeconfig_path}
+
+# Keep interactive SSH terminals in the single shared development session.
+if [[ \$- == *i* && -t 0 && -t 1 && -z "\${TMUX:-}" ]]; then
+    exec tmux new-session -A -s work
+fi
 EOF
 chmod 0644 /etc/profile.d/devpod.sh
 cat > /etc/ssh/sshd_config.d/10-devpod.conf <<EOF
