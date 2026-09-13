@@ -13,6 +13,7 @@ dnsmasq:
   customDnsEntries:
     - address=/internal.dtavana.dev/192.168.0.30
     - address=/homepage.dtavana.dev/192.168.0.30
+    - address=/devpod.internal.dtavana.dev/192.168.0.35
 ingress:
   enabled: true
   ingressClassName: nginx-internal

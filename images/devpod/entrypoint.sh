@@ -6,16 +6,96 @@ if ! user_home="$(getent passwd "$user_name" | cut -d: -f6)"; then
     echo "Unable to determine the home directory for ${user_name}" >&2
     exit 1
 fi
-ssh_dir="$user_home/.ssh"
-authorized_keys="$ssh_dir/authorized_keys"
 
 if [[ -z "$user_home" ]]; then
     echo "Unable to determine the home directory for ${user_name}" >&2
     exit 1
 fi
 
+ssh_dir="$user_home/.ssh"
+authorized_keys="$ssh_dir/authorized_keys"
+
+bootstrap_repositories() {
+    local repositories_json="${DEFAULT_REPOSITORIES_JSON:-[]}"
+    local repository_url repository_path repository_ref parent_dir temp_dir clone_path
+
+    if [[ -z "$repositories_json" ]]; then
+        return 0
+    fi
+
+    if ! jq -e 'type == "array"' >/dev/null <<<"$repositories_json"; then
+        echo "DEFAULT_REPOSITORIES_JSON must be a JSON array; skipping repository bootstrap" >&2
+        return 1
+    fi
+
+    while IFS=$'\t' read -r repository_url repository_path repository_ref; do
+        if [[ -z "$repository_url" || -z "$repository_path" ]]; then
+            echo "Skipping repository entry without a URL and path" >&2
+            continue
+        fi
+
+        if [[ "$repository_path" != "$user_home" && "$repository_path" != "$user_home/"* ]]; then
+            echo "Skipping repository outside ${user_home}: ${repository_path}" >&2
+            continue
+        fi
+
+        if [[ -e "$repository_path/.git" ]]; then
+            echo "Repository already exists; leaving it unchanged: ${repository_path}"
+            continue
+        fi
+
+        if [[ -e "$repository_path" ]] && [[ -n "$(find "$repository_path" -mindepth 1 -maxdepth 1 -print -quit)" ]]; then
+            echo "Skipping non-empty path that is not a Git checkout: ${repository_path}" >&2
+            continue
+        fi
+
+        parent_dir="$(dirname "$repository_path")"
+        mkdir -p "$parent_dir"
+        temp_dir="$(mktemp -d "${parent_dir}/.devpod-bootstrap.XXXXXX")"
+        clone_path="${temp_dir}/repository"
+
+        echo "Cloning ${repository_url} into ${repository_path}"
+        if [[ -n "$repository_ref" ]]; then
+            if ! git clone --branch "$repository_ref" --single-branch "$repository_url" "$clone_path"; then
+                echo "Unable to clone ${repository_url}; leaving SSH available for a later retry" >&2
+                rm -rf "$temp_dir"
+                continue
+            fi
+        elif ! git clone "$repository_url" "$clone_path"; then
+            echo "Unable to clone ${repository_url}; leaving SSH available for a later retry" >&2
+            rm -rf "$temp_dir"
+            continue
+        fi
+
+        if [[ -d "$repository_path" ]] && ! rmdir "$repository_path"; then
+            echo "Unable to replace the empty repository path: ${repository_path}" >&2
+            rm -rf "$temp_dir"
+            continue
+        fi
+
+        if ! mv "$clone_path" "$repository_path"; then
+            echo "Unable to install cloned repository at ${repository_path}" >&2
+            rm -rf "$temp_dir"
+            continue
+        fi
+        rmdir "$temp_dir"
+
+        if [[ "$(id -u)" -eq 0 ]]; then
+            chown -R "$user_name:$user_name" "$repository_path"
+        fi
+    done < <(jq -r '.[] | [(.url // ""), (.path // ""), (.ref // "")] | @tsv' <<<"$repositories_json")
+}
+
+if [[ "$(basename "$0")" == "devpod-bootstrap" || "${1:-}" == "bootstrap" ]]; then
+    bootstrap_repositories
+    exit $?
+fi
+
 chown "$user_name:$user_name" "$user_home"
 install -d -o "$user_name" -g "$user_name" -m 0700 "$ssh_dir"
+if [[ ! -e "$authorized_keys" ]]; then
+    install -o "$user_name" -g "$user_name" -m 0600 /dev/null "$authorized_keys"
+fi
 
 if [[ -n "${PUBLIC_KEY_URL:-}" ]]; then
     key_file="$(mktemp)"
@@ -46,7 +126,48 @@ chown "$user_name:$user_name" "$ssh_dir" "$authorized_keys"
 chmod 0700 "$ssh_dir"
 chmod 0600 "$authorized_keys"
 
+service_account_dir=/var/run/secrets/kubernetes.io/serviceaccount
+kubeconfig_path="${KUBECONFIG:-/etc/devpod/kubeconfig}"
+if [[ -r "$service_account_dir/token" && -r "$service_account_dir/ca.crt" ]]; then
+    install -d -m 0755 "$(dirname "$kubeconfig_path")"
+    cat >"$kubeconfig_path" <<EOF
+apiVersion: v1
+kind: Config
+clusters:
+- name: in-cluster
+  cluster:
+    certificate-authority: ${service_account_dir}/ca.crt
+    server: https://kubernetes.default.svc.cluster.local:443
+users:
+- name: ${user_name}
+  user:
+    tokenFile: ${service_account_dir}/token
+contexts:
+- name: in-cluster
+  context:
+    cluster: in-cluster
+    namespace: default
+    user: ${user_name}
+current-context: in-cluster
+EOF
+    chmod 0644 "$kubeconfig_path"
+fi
+
+if [[ -n "${DEFAULT_REPOSITORIES_JSON:-}" ]]; then
+    if ! runuser -u "$user_name" -- env HOME="$user_home" USER="$user_name" \
+        DEFAULT_REPOSITORIES_JSON="$DEFAULT_REPOSITORIES_JSON" \
+        /usr/local/bin/devpod-bootstrap; then
+        echo "Repository bootstrap completed with errors; continuing startup" >&2
+    fi
+fi
+
 install -d -m 0755 /etc/ssh/sshd_config.d /run/sshd
+cat >/etc/profile.d/devpod.sh <<EOF
+export HOME=${user_home}
+export CODEX_HOME=${CODEX_HOME:-${user_home}/.codex}
+export KUBECONFIG=${kubeconfig_path}
+EOF
+chmod 0644 /etc/profile.d/devpod.sh
 cat > /etc/ssh/sshd_config.d/10-devpod.conf <<EOF
 Port 2222
 ListenAddress 0.0.0.0
@@ -60,6 +181,9 @@ AllowUsers ${user_name}
 UsePAM yes
 X11Forwarding no
 UseDNS no
+SetEnv HOME=${user_home}
+SetEnv CODEX_HOME=${CODEX_HOME:-${user_home}/.codex}
+SetEnv KUBECONFIG=${kubeconfig_path}
 HostKey ${ssh_dir}/sshd_host_ed25519_key
 HostKey ${ssh_dir}/sshd_host_rsa_key
 Subsystem sftp /usr/lib/openssh/sftp-server
