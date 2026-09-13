@@ -95,6 +95,15 @@ fi
 chown "$user_name:$user_name" "$user_home"
 install -d -o "$user_name" -g "$user_name" -m 0700 "$ssh_dir"
 install -d -o "$user_name" -g "$user_name" -m 0700 "$codex_home"
+# CODEX_HOME is on the persistent PVC and may contain directories created by
+# an earlier root-owned startup. Codex creates per-process helper aliases
+# below CODEX_HOME/tmp/arg0, so the entire state directory must be usable by
+# the SSH/Codex user on every restart.
+if [[ "$(id -u)" -eq 0 ]]; then
+    chown -R "$user_name:$user_name" "$codex_home"
+    install -d -o "$user_name" -g "$user_name" -m 0700 \
+        "$codex_home/tmp" "$codex_home/tmp/arg0"
+fi
 if [[ ! -e "$authorized_keys" ]]; then
     install -o "$user_name" -g "$user_name" -m 0600 /dev/null "$authorized_keys"
 fi
