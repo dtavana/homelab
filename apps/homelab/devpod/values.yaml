@@ -8,6 +8,11 @@ controllers:
           tag: ubuntu-24.04
           pullPolicy: Always
         env:
+          CODEX_HOME: /home/dev/.codex
+          DEFAULT_REPOSITORIES_JSON: >-
+            [{"url":"https://github.com/dtavana/homelab.git","path":"/home/dev/src/homelab","ref":"main"}]
+          HOME: /home/dev
+          KUBECONFIG: /etc/devpod/kubeconfig
           TZ: America/New_York
           PUBLIC_KEY_URL: https://github.com/dtavana.keys
         resources:
@@ -17,10 +22,16 @@ controllers:
           limits:
             cpu: "4"
             memory: 8Gi
+defaultPodOptions:
+  automountServiceAccountToken: true
+serviceAccount:
+  create: false
+  name: devpod-admin
 service:
   main:
     controller: main
     type: LoadBalancer
+    loadBalancerIP: 192.168.0.35
     externalTrafficPolicy: Local
     loadBalancerSourceRanges:
       - 10.5.5.0/24

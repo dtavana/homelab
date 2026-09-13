@@ -8,8 +8,18 @@ and image updates.
 The image is built from `mcr.microsoft.com/devcontainers/base:ubuntu-24.04` by
 the `Build devpod image` GitHub Actions workflow and published as
 `ghcr.io/dtavana/homelab-devpod`. The image includes Git, Go, Node.js, Python,
-Nano, ripgrep, fd, tmux, and common build tools. Packages are installed while
-the image is built instead of on every pod startup.
+Nano, ripgrep, fd, tmux, common build tools, Codex CLI, kubectl, Helm, Flux,
+Kustomize, GitHub CLI, SOPS, age, and yq. Packages are installed while the
+image is built instead of on every pod startup.
+
+Pull requests that change the image build it without publishing it. After the
+change reaches `main`, the workflow publishes an immutable `sha-<commit>` tag
+and commits that tag to `apps/homelab/devpod/values.yaml`. That GitOps commit
+causes Flux to roll the pod only after the matching image exists. Renovate
+tracks the pinned Kubernetes and utility CLI releases in the Dockerfile. Codex
+is intentionally updated manually to the version used by Codex Desktop; check
+the desktop machine with `codex --version`, update `CODEX_VERSION`, and let the
+pull-request image build verify `codex app-server` before merging.
 
 Before the HelmRelease can pull the image, make the GitHub Container Registry
 package public, or add an image pull secret to the deployment. The first image
@@ -26,7 +36,7 @@ kubectl -n devpod-system get service devpod
 Then connect from a host on the WireGuard or home LAN network:
 
 ```sh
-ssh -p 2222 dev@<EXTERNAL-IP>
+ssh -p 2222 dev@devpod.internal.dtavana.dev
 ```
 
 SSH is limited to `10.5.5.0/24` and `192.168.0.0/24`, password authentication
@@ -37,3 +47,63 @@ another GitHub account should be trusted.
 The existing 30Gi Longhorn claim is mounted at `/home/dev`. This keeps the
 existing devpod data on the same claim while moving away from the LinuxServer
 `/config` layout; inspect the claim before deleting any old files.
+
+## Default repositories
+
+The pod reads `DEFAULT_REPOSITORIES_JSON` at startup. The checked-in default
+clones the homelab repository into `/home/dev/src/homelab` only when that path
+does not already contain a Git checkout. Existing checkouts are never pulled,
+reset, or overwritten. Configure additional repositories in
+`apps/homelab/devpod/values.yaml` using objects with `url`, `path`, and optional
+`ref` fields.
+
+If a private repository cannot be cloned during startup, SSH remains available.
+Authenticate GitHub and retry manually:
+
+```sh
+gh auth login
+devpod-bootstrap
+```
+
+## Codex Desktop remote project
+
+Codex Desktop starts the remote Codex app server through SSH, so `codex` is
+installed globally and available to the login shell. Add this to the client
+machine's `~/.ssh/config`:
+
+```sshconfig
+Host homelab-devpod
+    HostName devpod.internal.dtavana.dev
+    Port 2222
+    User dev
+    IdentityFile ~/.ssh/id_ed25519
+```
+
+Verify the connection:
+
+```sh
+ssh homelab-devpod 'codex --version && kubectl get nodes'
+```
+
+For first-time ChatGPT authentication on the headless pod, use device-code
+login. The Codex auth cache lives under `/home/dev/.codex` on the persistent
+volume; treat it as a credential and never commit it:
+
+```sh
+ssh homelab-devpod
+codex login --device-auth
+```
+
+In Codex Desktop, open Settings → Connections → SSH, add `homelab-devpod`, and
+select `/home/dev/src/homelab` as the project folder.
+
+## Kubernetes access
+
+The pod uses the `devpod-admin` service account, which is intentionally bound
+to `cluster-admin` for manual administration from the persistent SSH shell.
+Codex runs as the same `dev` user and can technically use that access through
+direct shell commands; the existing Kubernetes MCP server's confirmation rules
+remain a soft safety boundary rather than a Kubernetes permission boundary.
+
+Pod restarts preserve repositories, Codex credentials, SSH keys, and the
+kubeconfig configuration, but terminate any in-flight process.
