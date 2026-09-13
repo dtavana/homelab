@@ -11,7 +11,7 @@ ARG HELM_VERSION=3.17.3
 # renovate: datasource=github-releases depName=fluxcd/flux2 extractVersion=^v(?<version>.*)$
 ARG FLUX_VERSION=2.5.1
 # renovate: datasource=github-releases depName=kubernetes-sigs/kustomize extractVersion=^kustomize/v(?<version>.*)$
-ARG KUSTOMIZE_VERSION=5.6.0
+ARG KUSTOMIZE_VERSION=5.8.1
 # renovate: datasource=github-releases depName=cli/cli extractVersion=^v(?<version>.*)$
 ARG GH_VERSION=2.67.0
 # renovate: datasource=github-releases depName=getsops/sops extractVersion=^v(?<version>.*)$
