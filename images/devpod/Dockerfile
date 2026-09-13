@@ -19,7 +19,7 @@ ARG SOPS_VERSION=3.9.4
 # renovate: datasource=github-releases depName=FiloSottile/age extractVersion=^v(?<version>.*)$
 ARG AGE_VERSION=1.2.0
 # renovate: datasource=github-releases depName=mikefarah/yq extractVersion=^v(?<version>.*)$
-ARG YQ_VERSION=4.45.1
+ARG YQ_VERSION=4.53.6
 
 RUN apt-get update \
     && apt-get install --no-install-recommends --yes \
