@@ -12,14 +12,19 @@ Nano, ripgrep, fd, tmux, common build tools, Codex CLI, kubectl, Helm, Flux,
 Kustomize, GitHub CLI, SOPS, age, and yq. Packages are installed while the
 image is built instead of on every pod startup.
 
-Pull requests that change the image build it without publishing it. After the
-change reaches `main`, the workflow publishes an immutable `sha-<commit>` tag
-and commits that tag to `apps/homelab/devpod/values.yaml`. That GitOps commit
-causes Flux to roll the pod only after the matching image exists. Renovate
-tracks the pinned Kubernetes and utility CLI releases in the Dockerfile. Codex
-is intentionally updated manually to the version used by Codex Desktop; check
-the desktop machine with `codex --version`, update `CODEX_VERSION`, and let the
-pull-request image build verify `codex app-server` before merging.
+Pull requests that change the image build it without publishing it. Image
+releases use `ubuntu-24.04-<version>`, where the version is stored in
+`images/devpod/VERSION`; the workflow verifies that `values.yaml` selects the
+same tag and rejects image changes that do not bump the version. After the
+change reaches `main`, the workflow publishes that tag and Flux rolls the pod.
+The versioned tag keeps image deployment compatible with branch protection:
+the manifest change goes through the same reviewed PR as the image change.
+
+Renovate tracks the pinned Kubernetes and utility CLI releases in the
+Dockerfile. Codex is intentionally updated manually to the version used by
+Codex Desktop; check the desktop machine with `codex --version`, update
+`CODEX_VERSION`, bump `images/devpod/VERSION`, update the tag in `values.yaml`,
+and let the pull-request image build verify `codex app-server` before merging.
 
 Before the HelmRelease can pull the image, make the GitHub Container Registry
 package public, or add an image pull secret to the deployment. The first image
