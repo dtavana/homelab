@@ -94,6 +94,7 @@ RUN npm install --global "@openai/codex@${CODEX_VERSION}" \
     && command -v codex \
     && codex --version \
     && codex app-server --help >/dev/null \
+    && tmux -V \
     && kubectl version --client \
     && helm version --short \
     && flux --version \
