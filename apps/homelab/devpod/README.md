@@ -53,6 +53,22 @@ The existing 30Gi Longhorn claim is mounted at `/home/dev`. This keeps the
 existing devpod data on the same claim while moving away from the LinuxServer
 `/config` layout; inspect the claim before deleting any old files.
 
+## Outbound SSH authentication
+
+On container startup, the entrypoint automatically starts a user-owned
+`ssh-agent` on the persistent socket `/home/dev/.ssh/agent.sock`. If
+`/home/dev/.ssh/id_ed25519_devpod` exists, it loads that identity and exposes
+the agent to SSH login sessions. This identity is intended for outbound Git
+and SSH connections and is separate from `authorized_keys` and the SSH host
+keys used by the devpod server.
+
+The default identity is currently unencrypted so it can be loaded without an
+interactive prompt after a pod restart. A passphrase-protected identity will
+leave the agent running but requires `ssh-add` manually or SSH agent
+forwarding. To use another identity path, set `SSH_IDENTITY_FILE` in the
+devpod values. The key is stored on the persistent Longhorn volume; limit
+access to the devpod and use a least-privileged key where possible.
+
 ## Default repositories
 
 The pod reads `DEFAULT_REPOSITORIES_JSON` at startup. The checked-in default

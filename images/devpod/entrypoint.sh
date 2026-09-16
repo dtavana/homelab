@@ -16,6 +16,27 @@ ssh_dir="$user_home/.ssh"
 authorized_keys="$ssh_dir/authorized_keys"
 codex_home="${CODEX_HOME:-${user_home}/.codex}"
 
+ssh_identity_file="${SSH_IDENTITY_FILE:-${ssh_dir}/id_ed25519_devpod}"
+ssh_agent_socket="${SSH_AGENT_SOCKET:-${ssh_dir}/agent.sock}"
+ssh_agent_started=false
+
+start_ssh_agent() {
+    if [[ ! -f "$ssh_identity_file" ]]; then
+        return 0
+    fi
+
+    rm -f "$ssh_agent_socket"
+    runuser -u "$user_name" -- env HOME="$user_home" \
+        ssh-agent -a "$ssh_agent_socket" -s >/dev/null
+
+    if ! runuser -u "$user_name" -- env HOME="$user_home" \
+        SSH_AUTH_SOCK="$ssh_agent_socket" ssh-add "$ssh_identity_file" </dev/null; then
+        echo "Unable to load SSH identity ${ssh_identity_file}; the agent is running without it" >&2
+    fi
+
+    ssh_agent_started=true
+}
+
 bootstrap_repositories() {
     local repositories_json="${DEFAULT_REPOSITORIES_JSON:-[]}"
     local repository_url repository_path repository_ref parent_dir temp_dir clone_path
@@ -128,6 +149,8 @@ chown "$user_name:$user_name" "$ssh_dir" "$authorized_keys"
 chmod 0700 "$ssh_dir"
 chmod 0600 "$authorized_keys"
 
+start_ssh_agent
+
 service_account_dir=/var/run/secrets/kubernetes.io/serviceaccount
 kubeconfig_path="${KUBECONFIG:-/etc/devpod/kubeconfig}"
 if [[ -r "$service_account_dir/token" && -r "$service_account_dir/ca.crt" ]]; then
@@ -170,7 +193,14 @@ export HOME=${user_home}
 export CODEX_HOME=${codex_home}
 export KUBECONFIG=${kubeconfig_path}
 EOF
+if [[ "$ssh_agent_started" == true ]]; then
+    printf 'export SSH_AUTH_SOCK=%s\n' "$ssh_agent_socket" >> /etc/profile.d/devpod.sh
+fi
 chmod 0644 /etc/profile.d/devpod.sh
+sshd_environment="HOME=${user_home} CODEX_HOME=${codex_home} KUBECONFIG=${kubeconfig_path}"
+if [[ "$ssh_agent_started" == true ]]; then
+    sshd_environment+=" SSH_AUTH_SOCK=${ssh_agent_socket}"
+fi
 cat > /etc/ssh/sshd_config.d/10-devpod.conf <<EOF
 Port 2222
 ListenAddress 0.0.0.0
@@ -184,7 +214,7 @@ AllowUsers ${user_name}
 UsePAM yes
 X11Forwarding no
 UseDNS no
-SetEnv HOME=${user_home} CODEX_HOME=${codex_home} KUBECONFIG=${kubeconfig_path}
+SetEnv ${sshd_environment}
 HostKey ${ssh_dir}/sshd_host_ed25519_key
 HostKey ${ssh_dir}/sshd_host_rsa_key
 Subsystem sftp /usr/lib/openssh/sftp-server
