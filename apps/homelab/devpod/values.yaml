@@ -6,7 +6,7 @@ controllers:
         image:
           repository: ghcr.io/dtavana/homelab-devpod
           # Must match ubuntu-24.04-<images/devpod/VERSION>.
-          tag: ubuntu-24.04-2026.09.13.2
+          tag: ubuntu-24.04-2026.09.19.1
           pullPolicy: Always
         env:
           CODEX_HOME: /home/dev/.codex

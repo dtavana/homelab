@@ -7,10 +7,10 @@ and image updates.
 
 The image is built from `mcr.microsoft.com/devcontainers/base:ubuntu-24.04` by
 the `Build devpod image` GitHub Actions workflow and published as
-`ghcr.io/dtavana/homelab-devpod`. The image includes Git, Go, Node.js, Python,
-Nano, ripgrep, fd, tmux, common build tools, Codex CLI, kubectl, Helm, Flux,
-Kustomize, GitHub CLI, SOPS, age, and yq. Packages are installed while the
-image is built instead of on every pod startup.
+`ghcr.io/dtavana/homelab-devpod`. The image includes Git, Jujutsu, Go,
+Node.js, Python, Nano, ripgrep, fd, tmux, common build tools, Codex CLI,
+kubectl, Helm, Flux, Kustomize, GitHub CLI, SOPS, age, and yq. Packages are
+installed while the image is built instead of on every pod startup.
 
 Pull requests that change the image build it without publishing it. Image
 releases use `ubuntu-24.04-<version>`, where the version is stored in

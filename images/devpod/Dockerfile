@@ -20,6 +20,8 @@ ARG SOPS_VERSION=3.9.4
 ARG AGE_VERSION=1.2.0
 # renovate: datasource=github-releases depName=mikefarah/yq extractVersion=^v(?<version>.*)$
 ARG YQ_VERSION=4.45.1
+# renovate: datasource=github-releases depName=jj-vcs/jj extractVersion=^v(?<version>.*)$
+ARG JJ_VERSION=0.45.1
 
 RUN apt-get update \
     && apt-get install --no-install-recommends --yes \
@@ -53,6 +55,7 @@ RUN set -eux; \
             sops_arch=amd64; \
             age_arch=amd64; \
             yq_arch=amd64; \
+            jj_arch=x86_64; \
             ;; \
         arm64) \
             helm_arch=arm64; \
@@ -62,6 +65,7 @@ RUN set -eux; \
             sops_arch=arm64; \
             age_arch=arm64; \
             yq_arch=arm64; \
+            jj_arch=aarch64; \
             ;; \
         *) echo "Unsupported architecture: ${TARGETARCH}" >&2; exit 1 ;; \
     esac; \
@@ -96,6 +100,12 @@ RUN set -eux; \
     curl --fail --silent --show-error --location \
         "https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_${yq_arch}" \
         --output /usr/local/bin/yq; \
+    mkdir -p /tmp/jj-release; \
+    curl --fail --silent --show-error --location \
+        "https://github.com/jj-vcs/jj/releases/download/v${JJ_VERSION}/jj-v${JJ_VERSION}-${jj_arch}-unknown-linux-musl.tar.gz" \
+        | tar -xz -C /tmp/jj-release; \
+    install -m 0755 /tmp/jj-release/jj /usr/local/bin/jj; \
+    rm -rf /tmp/jj-release; \
     chmod 0755 /usr/local/bin/kubectl /usr/local/bin/sops /usr/local/bin/yq
 
 RUN npm install --global "@openai/codex@${CODEX_VERSION}" \
@@ -110,7 +120,8 @@ RUN npm install --global "@openai/codex@${CODEX_VERSION}" \
     && gh --version \
     && sops --version \
     && age --version \
-    && yq --version
+    && yq --version \
+    && jj --version
 
 # Keep the existing SSH username and UID/GID used by the devpod deployment.
 RUN usermod --login dev --home /home/dev --move-home vscode \
