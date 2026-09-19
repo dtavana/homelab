@@ -2,7 +2,7 @@ image:
   registry: ghcr.io
   repository: containers/kubernetes-mcp-server
   # renovate: datasource=docker depName=ghcr.io/containers/kubernetes-mcp-server
-  version: v0.0.66
+  version: v0.0.67
 serviceAccount:
   automountToken: true
 rbac:
