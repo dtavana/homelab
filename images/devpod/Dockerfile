@@ -35,6 +35,7 @@ RUN apt-get update \
         nodejs \
         npm \
         openssh-server \
+        bubblewrap \
         python3-pip \
         python3-venv \
         ripgrep \
@@ -112,6 +113,7 @@ RUN npm install --global "@openai/codex@${CODEX_VERSION}" \
     && command -v codex \
     && codex --version \
     && codex app-server --help >/dev/null \
+    && command -v bwrap \
     && tmux -V \
     && kubectl version --client \
     && helm version --short \
