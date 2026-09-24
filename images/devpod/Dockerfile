@@ -17,7 +17,7 @@ ARG GH_VERSION=2.67.0
 # renovate: datasource=github-releases depName=getsops/sops extractVersion=^v(?<version>.*)$
 ARG SOPS_VERSION=3.9.4
 # renovate: datasource=github-releases depName=FiloSottile/age extractVersion=^v(?<version>.*)$
-ARG AGE_VERSION=1.2.0
+ARG AGE_VERSION=1.3.2
 # renovate: datasource=github-releases depName=mikefarah/yq extractVersion=^v(?<version>.*)$
 ARG YQ_VERSION=4.45.1
 # renovate: datasource=github-releases depName=jj-vcs/jj extractVersion=^v(?<version>.*)$
