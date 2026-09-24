@@ -13,7 +13,7 @@ ARG FLUX_VERSION=2.5.1
 # renovate: datasource=github-releases depName=kubernetes-sigs/kustomize extractVersion=^kustomize/v(?<version>.*)$
 ARG KUSTOMIZE_VERSION=5.6.0
 # renovate: datasource=github-releases depName=cli/cli extractVersion=^v(?<version>.*)$
-ARG GH_VERSION=2.67.0
+ARG GH_VERSION=2.101.0
 # renovate: datasource=github-releases depName=getsops/sops extractVersion=^v(?<version>.*)$
 ARG SOPS_VERSION=3.9.4
 # renovate: datasource=github-releases depName=FiloSottile/age extractVersion=^v(?<version>.*)$
