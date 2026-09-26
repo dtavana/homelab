@@ -209,6 +209,7 @@ services = ingresses
   File.write(File.join(dir, "settings.yaml"), settings_yaml(catalog, instance))
   File.write(File.join(dir, "widgets.yaml"), widgets_yaml)
   File.write(File.join(dir, "kubernetes.yaml"), "mode: cluster\ningress: true\n")
+  File.write(File.join(dir, "proxmox.yaml"), "[]\n")
   File.write(File.join(dir, "docker.yaml"), "")
   File.write(File.join(dir, "custom.css"), "")
   File.write(File.join(dir, "custom.js"), "")
