@@ -70,7 +70,7 @@ jobs:
             type=raw,value=ubuntu-24.04-${{ steps.version.outputs.value }}
             type=sha,format=long
       - name: Build and push image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: ./images/devpod
           push: ${{ github.event_name != 'pull_request' }}
