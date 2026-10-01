@@ -43,16 +43,20 @@ initContainers:
     args:
       - |
         set -e
+        # renovate: datasource=github-releases depName=hacs/integration
+        HACS_VERSION="2.0.5"
         HACS_DIR="/config/custom_components/hacs"
-        if [ -d "$HACS_DIR" ]; then
-          echo "HACS is already installed, skipping."
+        HACS_VERSION_FILE="$HACS_DIR/.hacs-version"
+        if [ -f "$HACS_VERSION_FILE" ] && [ "$(cat "$HACS_VERSION_FILE")" = "$HACS_VERSION" ]; then
+          echo "HACS $HACS_VERSION is already installed, skipping."
         else
-          echo "Installing HACS..."
+          echo "Installing HACS $HACS_VERSION..."
           apk add --no-cache wget unzip
+          rm -rf "$HACS_DIR"
           mkdir -p $(dirname "$HACS_DIR")
-          # renovate: datasource=github-releases depName=hacs/integration
-          wget -O /tmp/hacs.zip https://github.com/hacs/integration/releases/download/2.0.5/hacs.zip
+          wget -O /tmp/hacs.zip "https://github.com/hacs/integration/releases/download/${HACS_VERSION}/hacs.zip"
           unzip /tmp/hacs.zip -d "$HACS_DIR"
+          printf '%s\n' "$HACS_VERSION" > "$HACS_VERSION_FILE"
           rm /tmp/hacs.zip
           echo "HACS installation complete."
         fi

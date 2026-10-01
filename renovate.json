@@ -76,7 +76,7 @@
       "description": "Update the pinned HACS release downloaded by Home Assistant.",
       "managerFilePatterns": ["/apps/homelab/home-assistant/values\\.yaml$/"],
       "matchStrings": [
-        "#\\s*renovate:\\s*datasource=github-releases\\s+depName=hacs/integration\\s*\\n\\s*wget\\s+-O\\s+/tmp/hacs\\.zip\\s+https://github\\.com/hacs/integration/releases/download/(?<currentValue>[^/\\s]+)/hacs\\.zip"
+        "#\\s*renovate:\\s*datasource=github-releases\\s+depName=hacs/integration\\s*\\n\\s*HACS_VERSION=\"(?<currentValue>[^\"]+)\""
       ],
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "hacs/integration",
