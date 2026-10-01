@@ -20,11 +20,12 @@ change reaches `main`, the workflow publishes that tag and Flux rolls the pod.
 The versioned tag keeps image deployment compatible with branch protection:
 the manifest change goes through the same reviewed PR as the image change.
 
-Renovate tracks the pinned Kubernetes and utility CLI releases in the
-Dockerfile. Codex is intentionally updated manually to the version used by
-Codex Desktop; check the desktop machine with `codex --version`, update
-`CODEX_VERSION`, bump `images/devpod/VERSION`, update the tag in `values.yaml`,
-and let the pull-request image build verify `codex app-server` before merging.
+Renovate tracks the pinned Kubernetes, utility CLI, and Codex npm releases in
+the Dockerfile. When Renovate opens a Codex update, review the new version
+against the Codex Desktop version, bump `images/devpod/VERSION`, update the tag
+in `values.yaml`, and let the pull-request image build verify the
+`codex app-server` command before merging. The image version/tag bump remains
+explicit so every image build gets a new immutable deployment tag.
 
 Before the HelmRelease can pull the image, make the GitHub Container Registry
 package public, or add an image pull secret to the deployment. The first image

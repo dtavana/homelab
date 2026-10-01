@@ -3,7 +3,8 @@ FROM mcr.microsoft.com/devcontainers/base:ubuntu-24.04
 USER root
 
 ARG TARGETARCH
-ARG CODEX_VERSION=0.154.0-alpha.6.2
+# renovate: datasource=npm depName=@openai/codex versioning=npm
+ARG CODEX_VERSION=0.161.0-alpha.7
 # renovate: datasource=github-releases depName=kubernetes/kubernetes extractVersion=^v(?<version>.*)$
 ARG KUBECTL_VERSION=1.34.1
 # renovate: datasource=github-releases depName=helm/helm extractVersion=^v(?<version>.*)$

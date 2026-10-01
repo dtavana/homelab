@@ -57,7 +57,7 @@
       "customType": "regex",
       "managerFilePatterns": ["/images/devpod/Dockerfile$/"],
       "matchStrings": [
-        "#\\s*renovate:\\s*datasource=(?<datasource>[a-z-]+)\\s+depName=(?<depName>[^\\s]+)\\s+extractVersion=(?<extractVersion>[^\\s]+)\\nARG\\s+[A-Z_]+_VERSION=(?<currentValue>[^\\s]+)"
+        "#\\s*renovate:\\s*datasource=(?<datasource>[a-z-]+)\\s+depName=(?<depName>[^\\s]+)(?:\\s+versioning=(?<versioning>[^\\s]+))?(?:\\s+extractVersion=(?<extractVersion>[^\\s]+))?\\nARG\\s+[A-Z_]+_VERSION=(?<currentValue>[^\\s]+)"
       ]
     }
   ],
