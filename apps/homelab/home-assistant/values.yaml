@@ -37,6 +37,7 @@ tolerations:
     tolerationSeconds: 30
 initContainers:
   - name: install-hacs
+    # renovate: datasource=docker depName=alpine
     image: alpine:3.22
     command: ["/bin/sh", "-c"]
     args:
@@ -49,6 +50,7 @@ initContainers:
           echo "Installing HACS..."
           apk add --no-cache wget unzip
           mkdir -p $(dirname "$HACS_DIR")
+          # renovate: datasource=github-releases depName=hacs/integration
           wget -O /tmp/hacs.zip https://github.com/hacs/integration/releases/download/2.0.5/hacs.zip
           unzip /tmp/hacs.zip -d "$HACS_DIR"
           rm /tmp/hacs.zip

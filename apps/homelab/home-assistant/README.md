@@ -5,6 +5,7 @@ This release is managed by Flux. The Flux `GitRepository` tracks `main`, and the
 ## Operational lessons
 
 - Pin init-container images and downloaded integrations. `alpine:latest` and HACS's `releases/latest` URL made the pod non-reproducible; `values.yaml` now pins Alpine and HACS 2.0.5.
+- Renovate has explicit matchers for both pins: Alpine updates follow the Docker patch-update policy, while HACS releases arrive as reviewable GitHub-release PRs.
 - A values change is not live until it is merged into `main` and Flux reconciles the HelmRelease. Verify both the HelmRelease revision and the StatefulSet after reconciliation.
 - Home Assistant automations live on the persistent `/config` volume. A YAML automation can reappear after a UI deletion, so remove the source entry from `/config/automations.yaml`, reload automations, and remove any stale restored entity.
 - LG webOS reports `unavailable` when the TV is powered off because its network service is unavailable. Automations that interpret the TV's power state should handle `unavailable` alongside `off` and `standby`.

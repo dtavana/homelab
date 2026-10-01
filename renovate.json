@@ -59,6 +59,28 @@
       "matchStrings": [
         "#\\s*renovate:\\s*datasource=(?<datasource>[a-z-]+)\\s+depName=(?<depName>[^\\s]+)\\s+extractVersion=(?<extractVersion>[^\\s]+)\\nARG\\s+[A-Z_]+_VERSION=(?<currentValue>[^\\s]+)"
       ]
+    },
+    {
+      "customType": "regex",
+      "description": "Update the pinned Home Assistant init-container Alpine image.",
+      "managerFilePatterns": ["/apps/homelab/home-assistant/values\\.yaml$/"],
+      "matchStrings": [
+        "#\\s*renovate:\\s*datasource=docker\\s+depName=alpine\\s*\\n\\s*image:\\s*alpine:(?<currentValue>[^\\s]+)"
+      ],
+      "datasourceTemplate": "docker",
+      "depNameTemplate": "alpine",
+      "versioningTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "description": "Update the pinned HACS release downloaded by Home Assistant.",
+      "managerFilePatterns": ["/apps/homelab/home-assistant/values\\.yaml$/"],
+      "matchStrings": [
+        "#\\s*renovate:\\s*datasource=github-releases\\s+depName=hacs/integration\\s*\\n\\s*wget\\s+-O\\s+/tmp/hacs\\.zip\\s+https://github\\.com/hacs/integration/releases/download/(?<currentValue>[^/\\s]+)/hacs\\.zip"
+      ],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "hacs/integration",
+      "versioningTemplate": "semver"
     }
   ],
   "prHourlyLimit": 0,
