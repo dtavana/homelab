@@ -15,6 +15,8 @@ fi
 ssh_dir="$user_home/.ssh"
 authorized_keys="$ssh_dir/authorized_keys"
 codex_home="${CODEX_HOME:-${user_home}/.codex}"
+gemini_home="${GEMINI_HOME:-${user_home}/.gemini}"
+agy_log_dir="${gemini_home}/antigravity-cli"
 
 bootstrap_repositories() {
     local repositories_json="${DEFAULT_REPOSITORIES_JSON:-[]}"
@@ -95,6 +97,11 @@ fi
 chown "$user_name:$user_name" "$user_home"
 install -d -o "$user_name" -g "$user_name" -m 0700 "$ssh_dir"
 install -d -o "$user_name" -g "$user_name" -m 0700 "$codex_home"
+install -d -o "$user_name" -g "$user_name" -m 0700 "$gemini_home"
+install -d -o "$user_name" -g "$user_name" -m 0700 "$agy_log_dir"
+if [[ "$(id -u)" -eq 0 ]]; then
+    chown -R "$user_name:$user_name" "$gemini_home"
+fi
 if [[ ! -e "$authorized_keys" ]]; then
     install -o "$user_name" -g "$user_name" -m 0600 /dev/null "$authorized_keys"
 fi
@@ -194,6 +201,37 @@ HostKey ${ssh_dir}/sshd_host_ed25519_key
 HostKey ${ssh_dir}/sshd_host_rsa_key
 Subsystem sftp /usr/lib/openssh/sftp-server
 EOF
+
+start_agy_daemon() {
+    if ! command -v agy >/dev/null 2>&1; then
+        echo "agy command not found; skipping Antigravity daemon" >&2
+        return 0
+    fi
+
+    local work_dir="/home/dev/src"
+    if [[ ! -d "$work_dir" ]]; then
+        work_dir="$user_home"
+    fi
+
+    echo "Starting Antigravity daemon background loop for ${user_name} in ${work_dir}..."
+    (
+        while true; do
+            if [[ "$(id -u)" -eq 0 ]]; then
+                runuser -u "$user_name" -- env HOME="$user_home" USER="$user_name" \
+                    bash -c "cd '$work_dir' && exec agy remote-control start --name 'devpod'" \
+                    >> "${agy_log_dir}/daemon.log" 2>&1 || true
+            else
+                (
+                    cd "$work_dir"
+                    exec agy remote-control start --name 'devpod'
+                ) >> "${agy_log_dir}/daemon.log" 2>&1 || true
+            fi
+            sleep 15
+        done
+    ) &
+}
+
+start_agy_daemon
 
 sshd -t
 exec /usr/sbin/sshd -D -e

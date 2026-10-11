@@ -109,6 +109,13 @@ RUN set -eux; \
     rm -rf /tmp/jj-release; \
     chmod 0755 /usr/local/bin/kubectl /usr/local/bin/sops /usr/local/bin/yq
 
+RUN curl -fsSL https://antigravity.google/cli/install.sh | bash \
+    && if [ -f /root/.local/bin/agy ] && [ ! -e /usr/local/bin/agy ]; then \
+        install -m 0755 /root/.local/bin/agy /usr/local/bin/agy; \
+    fi \
+    && command -v agy \
+    && agy --version
+
 RUN npm install --global "@openai/codex@${CODEX_VERSION}" \
     && command -v codex \
     && codex --version \
