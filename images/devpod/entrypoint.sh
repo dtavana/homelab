@@ -218,12 +218,12 @@ start_agy_daemon() {
         while true; do
             if [[ "$(id -u)" -eq 0 ]]; then
                 runuser -u "$user_name" -- env HOME="$user_home" USER="$user_name" \
-                    bash -c "cd '$work_dir' && exec agy remote-control start --name 'devpod'" \
+                    bash -c "cd '$work_dir' && exec agy remote-control serve" \
                     >> "${agy_log_dir}/daemon.log" 2>&1 || true
             else
                 (
                     cd "$work_dir"
-                    exec agy remote-control start --name 'devpod'
+                    exec agy remote-control serve
                 ) >> "${agy_log_dir}/daemon.log" 2>&1 || true
             fi
             sleep 15
