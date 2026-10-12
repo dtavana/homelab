@@ -1,19 +1,65 @@
 controllers:
   main:
     type: deployment
+    initContainers:
+      init-permissions:
+        image:
+          repository: alpine
+          tag: "3.20"
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            chown -R 1000:1000 /data
+            chmod -R u+rwX,g+rwX,o+rX /data
+        securityContext:
+          runAsUser: 0
     containers:
       main:
         image:
-          repository: ghcr.io/home-assistant-libs/python-matter-server
-          # renovate: datasource=docker depName=ghcr.io/home-assistant-libs/python-matter-server
-          tag: stable
+          repository: ghcr.io/matter-js/matterjs-server
+          # renovate: datasource=docker depName=ghcr.io/matter-js/matterjs-server versioning=semver
+          tag: "1.4.0"
+        probes:
+          liveness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /
+                port: 5580
+              initialDelaySeconds: 15
+              periodSeconds: 10
+              timeoutSeconds: 2
+              failureThreshold: 3
+          readiness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /
+                port: 5580
+              initialDelaySeconds: 10
+              periodSeconds: 10
+              timeoutSeconds: 2
+              failureThreshold: 3
+          startup:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /
+                port: 5580
+              initialDelaySeconds: 5
+              periodSeconds: 5
+              timeoutSeconds: 2
+              failureThreshold: 30
         resources:
           requests:
-            cpu: 50m
-            memory: 64Mi
-          limits:
-            cpu: 250m
+            cpu: 100m
             memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 1Gi
 service:
   main:
     controller: main
@@ -34,3 +80,8 @@ defaultPodOptions:
   dnsPolicy: ClusterFirstWithHostNet
   imagePullSecrets:
     - name: ghcr-creds
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
+    fsGroupChangePolicy: "OnRootMismatch"
