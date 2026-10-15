@@ -40,6 +40,12 @@
       "matchUpdateTypes": ["minor", "major"],
       "dependencyDashboardApproval": true,
       "labels": ["renovate", "helm", "manual-approval"]
+    },
+    {
+      "description": "Temporarily disable automatic Matter Server image updates until upstream tag ordering and device support are reviewed.",
+      "matchDatasources": ["docker"],
+      "matchDepNames": ["ghcr.io/matter-js/matterjs-server"],
+      "enabled": false
     }
   ],
   "flux": {
