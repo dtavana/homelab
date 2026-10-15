@@ -15,7 +15,7 @@ ARG KUSTOMIZE_VERSION=5.6.0
 # renovate: datasource=github-releases depName=cli/cli extractVersion=^v(?<version>.*)$
 ARG GH_VERSION=2.67.0
 # renovate: datasource=github-releases depName=getsops/sops extractVersion=^v(?<version>.*)$
-ARG SOPS_VERSION=3.9.4
+ARG SOPS_VERSION=3.13.3
 # renovate: datasource=github-releases depName=FiloSottile/age extractVersion=^v(?<version>.*)$
 ARG AGE_VERSION=1.2.0
 # renovate: datasource=github-releases depName=mikefarah/yq extractVersion=^v(?<version>.*)$
