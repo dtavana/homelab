@@ -35,6 +35,16 @@ tolerations:
     operator: Exists
     effect: NoExecute
     tolerationSeconds: 30
+affinity:
+  nodeAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        preference:
+          matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - k3s-node-1
 initContainers:
   - name: install-hacs
     image: alpine:latest
