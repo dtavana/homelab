@@ -8,6 +8,7 @@ resources:
   - ./mqttx
   - ./matter-server
   - ./zigbee2mqtt
+  - ./esphome
   - ./headlamp
   - ./beszel
   - ./minecraft
