@@ -55,6 +55,10 @@
         icon: mdi-web
         href: https://alertmanager.internal.dtavana.dev
         description: nginx-internal ingress
+    - Esphome:
+        icon: mdi-web
+        href: https://esphome.internal.dtavana.dev
+        description: nginx-internal ingress
     - Govee2mqtt:
         icon: mdi-web
         href: https://govee2mqtt.internal.dtavana.dev

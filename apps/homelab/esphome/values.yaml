@@ -1,0 +1,56 @@
+controllers:
+  main:
+    pod:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+    containers:
+      main:
+        image:
+          repository: ghcr.io/esphome/esphome
+          # renovate: datasource=docker depName=ghcr.io/esphome/esphome
+          tag: stable
+        env:
+          ESPHOME_DASHBOARD_USE_PING: "true"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 512Mi
+          limits:
+            cpu: 2000m
+            memory: 2Gi
+service:
+  main:
+    controller: main
+    ports:
+      http:
+        port: 6052
+ingress:
+  main:
+    className: nginx-internal
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-production
+      homepage.dev/enabled: "true"
+      homepage.dev/group: Home Automation
+      homepage.dev/name: ESPHome
+      homepage.dev/icon: esphome.png
+      homepage.dev/description: ESP Device Builder and Firmware Manager
+    hosts:
+      - host: esphome.internal.dtavana.dev
+        paths:
+          - path: /
+            service:
+              identifier: main
+              port: http
+    tls:
+      - hosts:
+          - esphome.internal.dtavana.dev
+        secretName: esphome-internal-tls
+persistence:
+  config:
+    enabled: true
+    type: persistentVolumeClaim
+    storageClass: longhorn
+    accessMode: ReadWriteOnce
+    size: 5Gi
+    globalMounts:
+      - path: /config
