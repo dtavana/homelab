@@ -5,7 +5,7 @@ USER root
 ARG TARGETARCH
 ARG CODEX_VERSION=0.154.0-alpha.6.2
 # renovate: datasource=github-releases depName=kubernetes/kubernetes extractVersion=^v(?<version>.*)$
-ARG KUBECTL_VERSION=1.34.1
+ARG KUBECTL_VERSION=1.37.1
 # renovate: datasource=github-releases depName=helm/helm extractVersion=^v(?<version>.*)$
 ARG HELM_VERSION=3.17.3
 # renovate: datasource=github-releases depName=fluxcd/flux2 extractVersion=^v(?<version>.*)$
