@@ -21,7 +21,7 @@ ARG AGE_VERSION=1.2.0
 # renovate: datasource=github-releases depName=mikefarah/yq extractVersion=^v(?<version>.*)$
 ARG YQ_VERSION=4.45.1
 # renovate: datasource=github-releases depName=jj-vcs/jj extractVersion=^v(?<version>.*)$
-ARG JJ_VERSION=0.45.1
+ARG JJ_VERSION=0.46.0
 
 RUN apt-get update \
     && apt-get install --no-install-recommends --yes \
