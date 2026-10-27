@@ -9,3 +9,10 @@ configMapGenerator:
     namespace: flux-system
     files:
       - values.yaml=./values.yaml
+  - name: home-assistant-fp400-installer
+    namespace: hass-system
+    files:
+      - install_fp400.py=./fp400/install_fp400.py
+      - source.tar.gz.b64=./fp400/source.tar.gz.b64
+      - candidate-sha256sums.txt=./fp400/candidate-sha256sums.txt
+      - LICENSE=./fp400/LICENSE
