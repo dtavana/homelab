@@ -1,3 +1,5 @@
+podAnnotations:
+  fp400-installer-revision: "sha256:27c993e95c5e2bc87ba4dbb8698965b45018dd103b6574ab3a5e5e239b283804"
 hostNetwork: true
 dnsPolicy: ClusterFirstWithHostNet
 persistence:
@@ -45,6 +47,10 @@ affinity:
               operator: In
               values:
                 - k3s-node-1
+additionalVolumes:
+  - name: home-assistant-fp400-installer
+    configMap:
+      name: home-assistant-fp400-installer
 initContainers:
   - name: install-hacs
     image: alpine:latest
@@ -67,3 +73,14 @@ initContainers:
     volumeMounts:
       - name: hass-system-home-assistant
         mountPath: /config
+  - name: install-aqara-fp400
+    image: ghcr.io/home-assistant/home-assistant:2026.10.4
+    imagePullPolicy: IfNotPresent
+    command: ["python3", "/run/fp400-installer/install_fp400.py"]
+    args: ["install"]
+    volumeMounts:
+      - name: hass-system-home-assistant
+        mountPath: /config
+      - name: home-assistant-fp400-installer
+        mountPath: /run/fp400-installer
+        readOnly: true
