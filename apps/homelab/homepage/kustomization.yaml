@@ -15,6 +15,7 @@ configMapGenerator:
       - custom.js=./generated/public/custom.js
       - docker.yaml=./generated/public/docker.yaml
       - kubernetes.yaml=./generated/public/kubernetes.yaml
+      - proxmox.yaml=./generated/public/proxmox.yaml
       - services.yaml=./generated/public/services.yaml
       - settings.yaml=./generated/public/settings.yaml
       - widgets.yaml=./generated/public/widgets.yaml
@@ -26,6 +27,7 @@ configMapGenerator:
       - custom.js=./generated/internal/custom.js
       - docker.yaml=./generated/internal/docker.yaml
       - kubernetes.yaml=./generated/internal/kubernetes.yaml
+      - proxmox.yaml=./generated/internal/proxmox.yaml
       - services.yaml=./generated/internal/services.yaml
       - settings.yaml=./generated/internal/settings.yaml
       - widgets.yaml=./generated/internal/widgets.yaml
