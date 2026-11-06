@@ -1,5 +1,34 @@
 hostNetwork: true
 dnsPolicy: ClusterFirstWithHostNet
+resources:
+  requests:
+    cpu: 100m
+    memory: 512Mi
+  limits:
+    memory: 2Gi
+startupProbe:
+  tcpSocket:
+    port: 8123
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 2
+  failureThreshold: 30
+livenessProbe:
+  httpGet: null
+  tcpSocket:
+    port: 8123
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 2
+  failureThreshold: 3
+readinessProbe:
+  httpGet: null
+  tcpSocket:
+    port: 8123
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 2
+  failureThreshold: 3
 persistence:
   enabled: true
   existingClaim: ""
