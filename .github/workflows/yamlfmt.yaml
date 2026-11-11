@@ -37,7 +37,7 @@ jobs:
           fi
       - name: Commit changes
         if: steps.git-check.outputs.changes == 'true'
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "chore: auto-format YAML files"
           commit_user_name: "github-actions[bot]"
